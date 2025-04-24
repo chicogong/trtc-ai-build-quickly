@@ -1,0 +1,15 @@
+{
+  "name": "trtc-ai-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "private": true,
+  "dependencies": {
+    "express": "^5.1.0",
+    "tencentcloud-sdk-nodejs-trtc": "^4.1.18",
+    "tls-sig-api-v2": "^1.0.2"
+  }
+}
