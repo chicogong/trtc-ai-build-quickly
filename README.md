@@ -219,6 +219,7 @@ Continue only after customer agrees.
 ```
 
 ## 3. Optimization Notes
+> Note: For the following part of the technical optimization, please contact TRTC-AI technical support team for professional assistance and customization.
 
 ### 3.1 Experience Optimization
 1. Semantic Sentence Segmentation
@@ -234,8 +235,6 @@ Continue only after customer agrees.
    - Enhance conversation realism
 
 ### 3.2 Technical Optimization
-
-> Note: For the following part of the technical optimization, please contact TRTC-AI technical support team for professional assistance and customization.
 
 1. Response Speed Optimization
    - Sentence segmentation strategy, quick return of first sentence
