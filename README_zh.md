@@ -143,7 +143,21 @@ TRTC-AI 是一个灵活的集成解决方案，整合了以下核心能力：
    pm2 logs trtc-ai-app
    ```
 
-3. 验证服务：
+3. Docker 部署：
+   ```bash
+   # 基础部署
+   docker run -d --name trtc-ai-app -p 3000:3000 trtc-ai-app
+
+   # 使用环境变量
+   docker run -d \
+     --name trtc-ai-app \
+     -p 3000:3000 \
+     -e PORT=3000 \
+     -e HOST=0.0.0.0 \
+     trtc-ai-app
+   ```
+
+4. 验证服务：
    - 访问 http://localhost:3000 （或配置的其他端口）
    - 检查控制台输出确认服务正常运行
 

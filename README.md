@@ -142,7 +142,21 @@ For detailed pricing, please refer to [AI Real-time Conversation Pricing](https:
    pm2 logs trtc-ai-app
    ```
 
-3. Verify service:
+3. Docker deployment:
+   ```bash
+   # Basic deployment
+   docker run -d --name trtc-ai-app -p 3000:3000 trtc-ai-app
+
+   # With environment variables
+   docker run -d \
+     --name trtc-ai-app \
+     -p 3000:3000 \
+     -e PORT=3000 \
+     -e HOST=0.0.0.0 \
+     trtc-ai-app
+   ```
+
+4. Verify service:
    - Visit http://localhost:3000 (or other configured port)
    - Check console output to confirm service is running properly
 
@@ -331,4 +345,4 @@ Continue only after customer agrees.
 ### 4.2 Client Callbacks
 - Real-time subtitle display
 - Real-time status display
-- Exception handling (LLM, TTS) 
+- Exception handling (LLM, TTS)
