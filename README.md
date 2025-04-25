@@ -156,7 +156,28 @@ For detailed pricing, please refer to [AI Real-time Conversation Pricing](https:
      trtc-ai-app
    ```
 
-4. Verify service:
+4. CloudBase Cloud Run deployment:
+   1. Log in to [Tencent CloudBase Console](https://console.cloud.tencent.com/tcb)
+   2. Create a new cloud run service:
+      - Service name: trtc-ai-app
+      - Deployment type: Container service
+      - Deployment method: Upload code
+      - Code package type: Folder
+   3. Configure service parameters:
+      - Port: 3000
+      - Environment variables (optional):
+        ```
+        PORT=3000
+        HOST=0.0.0.0
+        ```
+   4. Submit deployment and wait for service to start
+   5. Access the system-assigned public domain to use the service
+
+   CloudBase service configuration example:
+   ![CloudBase Configuration Example](cloudbase.png)
+   > The image shows the CloudBase Cloud Run service creation configuration page. Follow the options shown in the image to complete the deployment
+
+5. Verify service:
    - Visit http://localhost:3000 (or other configured port)
    - Check console output to confirm service is running properly
 
