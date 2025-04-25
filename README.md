@@ -34,6 +34,76 @@ To activate:
 
 For detailed pricing, please refer to [AI Real-time Conversation Pricing](https://cloud.tencent.com/document/product/647/116792).
 
+### 3. Environment Setup
+
+#### Node.js Installation
+1. Visit [Node.js website](https://nodejs.org/) and install the LTS (Long Term Support) version
+   - Windows: Download and run the .msi installer
+   - macOS: Download .pkg installer or use brew install node
+   - Linux: Use package manager, e.g., apt install nodejs npm
+
+2. Verify installation:
+   ```bash
+   node --version
+   npm --version
+   ```
+
+#### Project Setup
+1. Clone the project:
+   ```bash
+   git clone https://github.com/chicogong/trtc-ai-build-quickly.git
+   cd trtc-ai-build-quickly
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Configuration:
+   - Open `server.js` file
+   - Fill in configuration details in the `CONFIG` object:
+     ```js
+     const CONFIG = {
+         apiConfig: {
+             SecretId: "xx",      // [Required] Get from https://console.cloud.tencent.com/cam/capi
+             SecretKey: "xx",     // [Required] Get from https://console.cloud.tencent.com/cam/capi
+             Region: "ap-beijing" // API access to the nearest region
+         },
+         trtcConfig: {
+             sdkAppId: 1400000000,     // [Required] Get from https://console.cloud.tencent.com/trtc/app
+             secretKey: "xx",          // [Required] Get from https://console.cloud.tencent.com/trtc/app
+             expireTime: 10 * 60 * 60  // User signature expiration time (seconds)
+         },
+         // ... See configuration details above for other settings
+     }
+     ```
+
+#### Starting the Application
+1. Development environment:
+   ```bash
+   npm start
+   ```
+
+2. Production environment (recommended with PM2):
+   ```bash
+   # Install PM2
+   npm install -g pm2
+   
+   # Start service
+   pm2 start server.js --name trtc-ai-app
+   
+   # Check status
+   pm2 status
+   
+   # View logs
+   pm2 logs trtc-ai-app
+   ```
+
+3. Verify service:
+   - Visit http://localhost:3000 (or other configured port)
+   - Check console output to confirm service is running properly
+
 ## Solution Overview
 
 TRTC-AI is a flexible integration solution that combines:

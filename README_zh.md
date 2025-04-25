@@ -34,6 +34,76 @@
 
 详细计费说明请参考[AI 实时对话计费说明](https://cloud.tencent.com/document/product/647/116792)。
 
+### 3. 环境准备
+
+#### Node.js 安装
+1. 访问 [Node.js 官网](https://nodejs.org/)，下载并安装 LTS（长期支持）版本
+   - Windows：下载 .msi 安装包并运行
+   - macOS：下载 .pkg 安装包或使用 brew install node
+   - Linux：使用包管理器，如 apt install nodejs npm
+
+2. 验证安装：
+   ```bash
+   node --version
+   npm --version
+   ```
+
+#### 项目设置
+1. 克隆项目：
+   ```bash
+   git clone https://github.com/chicogong/trtc-ai-build-quickly.git
+   cd trtc-ai-build-quickly
+   ```
+
+2. 安装依赖：
+   ```bash
+   npm install
+   ```
+
+3. 配置文件：
+   - 打开 `server.js` 文件
+   - 在 `CONFIG` 对象中填写配置信息：
+     ```js
+     const CONFIG = {
+         apiConfig: {
+             SecretId: "xx",      // [必填] 从 https://console.cloud.tencent.com/cam/capi 获取
+             SecretKey: "xx",     // [必填] 从 https://console.cloud.tencent.com/cam/capi 获取
+             Region: "ap-beijing" // API 就近接入点
+         },
+         trtcConfig: {
+             sdkAppId: 1400000000,     // [必填] 从 https://console.cloud.tencent.com/trtc/app 获取
+             secretKey: "xx",          // [必填] 从 https://console.cloud.tencent.com/trtc/app 获取
+             expireTime: 10 * 60 * 60  // 用户签名过期时间（秒）
+         },
+         // ... 其他配置项请参考上方配置说明
+     }
+     ```
+
+#### 启动程序
+1. 开发环境启动：
+   ```bash
+   npm start
+   ```
+
+2. 生产环境启动（推荐使用 PM2）：
+   ```bash
+   # 安装 PM2
+   npm install -g pm2
+   
+   # 启动服务
+   pm2 start server.js --name trtc-ai-app
+   
+   # 查看状态
+   pm2 status
+   
+   # 查看日志
+   pm2 logs trtc-ai-app
+   ```
+
+3. 验证服务：
+   - 访问 http://localhost:3000 （或配置的其他端口）
+   - 检查控制台输出确认服务正常运行
+
 ## 方案概述
 
 TRTC-AI 是一个灵活的集成解决方案，整合了以下核心能力：
@@ -105,9 +175,9 @@ const CONFIG = {
 
    // TRTC 配置
    trtcConfig: {
-      sdkAppId: 1400000000,     // [必填] 开通服务后在 https://console.cloud.tencent.com/trtc/app 获取
-      secretKey: "xx",          // [必填] 开通服务后在 https://console.cloud.tencent.com/trtc/app 获取
-      expireTime: 10 * 60 * 60  // 用户签名 10 小时过期时间（秒）
+      sdkAppId: 1400000000,     // [必填] 从 https://console.cloud.tencent.com/trtc/app 获取
+      secretKey: "xx",          // [必填] 从 https://console.cloud.tencent.com/trtc/app 获取
+      expireTime: 10 * 60 * 60  // 用户签名过期时间（秒）
    },
 
     // Agent configuration
