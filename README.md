@@ -30,6 +30,18 @@ The solution features multiple technical optimizations including:
 
 For detailed integration guide, please refer to the [official documentation](https://cloud.tencent.com/document/product/647/115412).
 
+## Demo
+
+Here's a simple conversation example:
+
+![Dialogue Interface Demo](dialogue.png)
+
+The demo shows:
+- Real-time conversation interface
+- AI assistant and user conversation status
+- Call control buttons (Call/Hangup)
+- Connection status display
+
 ## Key Features
 
 - **Real-time Voice Interaction**: 
