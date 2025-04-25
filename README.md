@@ -4,6 +4,51 @@
 
 This guide introduces how to implement an AI real-time conversation solution based on TRTC SDK. The solution leverages TRTC (Tencent Real-Time Communication) services and AI real-time conversation interfaces to achieve ultra-low latency AI interactions.
 
+## Table of Contents
+
+- [Solution Overview](#solution-overview)
+- [Key Features](#key-features)
+- [Prerequisites](#prerequisites)
+- [System Configuration](#1-system-configuration)
+- [Conversation Strategy](#2-conversation-strategy-configuration-systemprompt)
+- [Optimization Notes](#3-optimization-notes)
+- [Advanced Features](#4-advanced-features)
+
+## Solution Overview
+
+TRTC-AI is a flexible integration solution that combines:
+- Real-time voice communication through TRTC SDK
+- Speech recognition (ASR) with real-time noise reduction
+- Large language models (LLM) with customizable providers
+- Text-to-speech (TTS) with voice cloning capabilities
+
+The solution features multiple technical optimizations including:
+- Real-time voice noise reduction
+- AI smart interruption
+- Context management
+- Continuous user experience improvements
+
+For detailed integration guide, please refer to the [official documentation](https://cloud.tencent.com/document/product/647/115412).
+
+## Key Features
+
+- **Real-time Voice Interaction**: 
+  - High-quality voice communication
+  - Ultra-low latency (based on TRTC)
+  - Advanced noise reduction
+- **Intelligent Speech Processing**: 
+  - ASR with noise reduction
+  - Voiceprint recognition
+  - Smart interruption detection
+- **Conversation Intelligence**:
+  - Flexible LLM integration
+  - Context-aware responses
+  - Customizable business logic
+- **Rich Integration Options**:
+  - Server and client callbacks
+  - Flexible configuration
+  - Comprehensive customization
+
 ## Prerequisites
 
 Before starting, you need to activate the required services:
@@ -62,22 +107,7 @@ For detailed pricing, please refer to [AI Real-time Conversation Pricing](https:
 
 3. Configuration:
    - Open `server.js` file
-   - Fill in configuration details in the `CONFIG` object:
-     ```js
-     const CONFIG = {
-         apiConfig: {
-             SecretId: "xx",      // [Required] Get from https://console.cloud.tencent.com/cam/capi
-             SecretKey: "xx",     // [Required] Get from https://console.cloud.tencent.com/cam/capi
-             Region: "ap-beijing" // API access to the nearest region
-         },
-         trtcConfig: {
-             sdkAppId: 1400000000,     // [Required] Get from https://console.cloud.tencent.com/trtc/app
-             secretKey: "xx",          // [Required] Get from https://console.cloud.tencent.com/trtc/app
-             expireTime: 10 * 60 * 60  // User signature expiration time (seconds)
-         },
-         // ... See configuration details above for other settings
-     }
-     ```
+   - Fill in the `CONFIG` object according to the "System Configuration" section above
 
 #### Starting the Application
 1. Development environment:
@@ -103,48 +133,6 @@ For detailed pricing, please refer to [AI Real-time Conversation Pricing](https:
 3. Verify service:
    - Visit http://localhost:3000 (or other configured port)
    - Check console output to confirm service is running properly
-
-## Solution Overview
-
-TRTC-AI is a flexible integration solution that combines:
-- Real-time voice communication through TRTC SDK
-- Speech recognition (ASR) with real-time noise reduction
-- Large language models (LLM) with customizable providers
-- Text-to-speech (TTS) with voice cloning capabilities
-
-The solution features multiple technical optimizations including:
-- Real-time voice noise reduction
-- AI smart interruption
-- Context management
-- Continuous user experience improvements
-
-For detailed integration guide, please refer to the [official documentation](https://cloud.tencent.com/document/product/647/115412).
-
-## Key Features
-
-- **Real-time Voice Interaction**: 
-  - High-quality voice communication
-  - Ultra-low latency (based on TRTC)
-  - Advanced noise reduction
-- **Intelligent Speech Processing**: 
-  - ASR with noise reduction
-  - Voiceprint recognition
-  - Smart interruption detection
-- **Conversation Intelligence**:
-  - Flexible LLM integration
-  - Context-aware responses
-  - Customizable business logic
-- **Rich Integration Options**:
-  - Server and client callbacks
-  - Flexible configuration
-  - Comprehensive customization
-
-## Table of Contents
-
-- [System Configuration](#1-system-configuration)
-- [Conversation Strategy](#2-conversation-strategy-configuration-systemprompt)
-- [Optimization Notes](#3-optimization-notes)
-- [Advanced Features](#4-advanced-features)
 
 ## 1. System Configuration
 
