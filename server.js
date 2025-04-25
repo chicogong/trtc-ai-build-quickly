@@ -91,7 +91,11 @@ const app = express();
 app.use(express.json());
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
     next();
 });
 app.use(express.static(__dirname));
@@ -172,4 +176,9 @@ app.post('/getInfo', (req, res) => {
     }
 });
 
-app.listen(3000, () => { console.log('APP running at http://localhost:3000/') });
+const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || '127.0.0.1';
+
+app.listen(PORT, HOST, () => { 
+    console.log(`Server running at http://${HOST}:${PORT}/`);
+});
