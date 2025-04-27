@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TRTC-AI Conversation</title>
+  <script src='https://web.sdk.qcloud.com/trtc/webrtc/v5/dist/trtc.js'></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fcfcfc;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding-top: 20px;
+    }
+
+    #app {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 20px;
+    }
+
+    .app-title {
+      color: #555;
+      margin: 0 0 15px 0;
+      font-size: 18px;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .app-title:after {
+      content: "";
+      display: block;
+      width: 40px;
+      height: 3px;
+      background-color: #EFF8FF;
+      margin: 6px auto 0;
+      border-radius: 2px;
+    }
+
+    /* Status indicators styles */
+    #status-container {
+      display: flex;
+      justify-content: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+      width: 100%;
+    }
+
+    .status-indicator {
+      text-align: center;
+      padding: 5px 8px;
+      border-radius: 8px;
+      font-size: 12px;
+      width: 100px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    }
+
+    #room-status {
+      background-color: #F5FAFF;
+      color: #4B85C3;
+      border-color: rgba(75, 133, 195, 0.15);
+    }
+
+    #ai-state {
+      background-color: #fafafa;
+      color: #777;
+      border-color: rgba(119, 119, 119, 0.1);
+    }
+
+    .chat-list {
+      width: 100%;
+      height: 400px;
+      border: 1px solid rgba(75, 133, 195, 0.15);
+      padding: 12px;
+      background-color: #ffffff;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column-reverse;
+      overflow: auto;
+      border-radius: 10px;
+      box-shadow: 0 1px 8px rgba(0, 0, 0, 0.02);
+    }
+
+    /* Customize scrollbar */
+    .chat-list::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .chat-list::-webkit-scrollbar-track {
+      background: #fafafa;
+      border-radius: 10px;
+    }
+
+    .chat-list::-webkit-scrollbar-thumb {
+      background: #ececec;
+      border-radius: 10px;
+    }
+
+    .chat-list::-webkit-scrollbar-thumb:hover {
+      background: #dedede;
+    }
+
+    .chat-item {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 14px;
+      max-width: 85%;
+    }
+
+    .chat-item.user {
+      align-items: flex-end;
+      align-self: flex-end;
+    }
+
+    .chat-item.ai {
+      align-items: flex-start;
+      align-self: flex-start;
+    }
+
+    .chat-id {
+      font-weight: 600;
+      font-size: 11px;
+      color: #888;
+      margin-bottom: 3px;
+      display: flex;
+      align-items: center;
+    }
+
+    .chat-id:before {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+
+    .chat-item.user .chat-id:before {
+      background-color: #2196F3;
+    }
+
+    .chat-item.ai .chat-id:before {
+      background-color: #4CAF50;
+    }
+
+    .chat-text {
+      padding: 10px 14px;
+      border-radius: 16px;
+      max-width: 100%;
+      font-size: 14px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.02);
+      line-height: 1.4;
+      position: relative;
+    }
+
+    .chat-item.user .chat-text {
+      border-top-right-radius: 4px;
+      background-color: #EFF8FF;
+      color: #4B85C3;
+    }
+
+    .chat-item.ai .chat-text {
+      border-top-left-radius: 4px;
+      background-color: #F8F8F8;
+      color: #555;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      width: 100%;
+    }
+
+    button {
+      padding: 8px 20px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    .start-button {
+      background-color: #F5FAFF;
+      color: #4B85C3;
+      border-color: rgba(75, 133, 195, 0.3);
+    }
+
+    .end-button {
+      background-color: #FFF8F8;
+      color: #C77;
+      border-color: rgba(204, 119, 119, 0.3);
+    }
+
+    button:hover {
+      opacity: 0.9;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Text input styles */
+    .input-container {
+      display: flex;
+      width: 100%;
+      margin-bottom: 15px;
+      gap: 10px;
+    }
+    
+    .text-input {
+      flex: 1;
+      padding: 10px 15px;
+      border-radius: 20px;
+      border: 1px solid rgba(75, 133, 195, 0.2);
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    
+    .text-input:focus {
+      border-color: rgba(75, 133, 195, 0.5);
+      box-shadow: 0 1px 4px rgba(75, 133, 195, 0.1);
+    }
+    
+    .send-button {
+      padding: 8px 15px;
+      background-color: #4B85C3;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .send-button:hover:not(:disabled) {
+      background-color: #3a74b2;
+    }
+    
+    .send-button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+
+<body>
+<div id="app">
+  <h5 class="app-title">TRTC Conversational AI</h5>
+  <div id="status-container">
+    <div id="room-status" class="status-indicator">RTC Not Ready</div>
+    <div id="ai-state" class="status-indicator">AI Not Ready</div>
+  </div>
+  <div class="chat-list"></div>
+  <div class="input-container">
+    <input type="text" id="text-input" placeholder="Type a message..." class="text-input">
+    <button id="send-button" disabled class="send-button">Send</button>
+  </div>
+  <div class="button-container">
+    <button class="start-button" onclick="startConversation()">Call</button>
+    <button class="end-button" disabled onclick="stopConversation()">Hangup</button>
+  </div>
+</div>
+
+<script>
+  // Constants
+  const API_BASE_URL = window.location.origin;
+  const AI_STATES = {
+    LISTENING: 1,
+    THINKING: 2,
+    SPEAKING: 3,
+    INTERRUPT: 4
+  };
+  const STATE_LABELS = {
+    [AI_STATES.LISTENING]: "👂 Listening",
+    [AI_STATES.THINKING]: "💭 Thinking",
+    [AI_STATES.SPEAKING]: "💬 Speaking",
+    [AI_STATES.INTERRUPT]: "⚡️ Interrupt"
+  };
+  const MESSAGE_TYPES = {
+    CONVERSATION: 10000,
+    STATE_CHANGE: 10001,
+    CUSTOM_TEXT: 20000,
+    CUSTOM_INTERRUPT: 20001
+  };
+
+  // DOM Elements
+  const chatListElement = document.querySelector(".chat-list");
+  const startButton = document.querySelector(".start-button");
+  const endButton = document.querySelector(".end-button");
+  const textInput = document.getElementById("text-input");
+  const sendButton = document.getElementById("send-button");
+
+  // Application state
+  let messages = [];
+  let taskId = null;
+  let trtcClient = null;
+  let currentUserId = null;
+  let botUserId = null;
+
+  /**
+   * Renders the chat messages in the UI
+   */
+  function renderChatMessages() {
+    const fragment = document.createDocumentFragment();
+
+    messages.forEach(message => {
+      const messageElement = document.createElement("div");
+      messageElement.classList.add("chat-item", message.type);
+
+      const senderElement = document.createElement("div");
+      senderElement.classList.add("chat-id");
+      senderElement.textContent = message.sender;
+
+      const contentElement = document.createElement("div");
+      contentElement.classList.add("chat-text");
+      contentElement.textContent = message.content;
+
+      messageElement.appendChild(senderElement);
+      messageElement.appendChild(contentElement);
+      fragment.appendChild(messageElement);
+    });
+
+    chatListElement.innerHTML = "";
+    chatListElement.appendChild(fragment);
+  }
+
+  /**
+   * Updates the status indicators in the UI
+   * @param {string} type - The type of status to update ('ai' or 'room')
+   * @param {string} statusText - The status text to display
+   */
+  function updateStatus(type, statusText) {
+    const element = type === 'ai' ?
+            document.getElementById('ai-state') :
+            document.getElementById('room-status');
+
+    if (element) {
+      element.textContent = statusText;
+    } else {
+      console.warn(`Status element for type '${type}' not found`);
+    }
+  }
+
+  /**
+   * API call to start the AI conversation
+   * @param {Object} data - The user information for the conversation
+   * @returns {Promise} - The API response
+   */
+  async function startAIConversation(data) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/startConversation`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: data,
+      });
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Failed to start AI conversation:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * API call to stop the AI conversation
+   * @param {Object} data - The task information to stop
+   * @returns {Promise} - The API response
+   */
+  async function stopAIConversation(data) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/stopConversation`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: data,
+      });
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Failed to stop AI conversation:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Fetches user information from the server
+   * @returns {Promise} - The user info
+   */
+  async function getUserInfo() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/getInfo`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({})
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch user info: ${response.status}`);
+      }
+
+      const userInfo = await response.json();
+      console.log('User info retrieved successfully');
+      return userInfo;
+    } catch (error) {
+      console.error('Error getting user info:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Initializes the chat configuration
+   * @returns {Promise} - Object containing user info
+   */
+  async function initChatConfig() {
+    try {
+      const userInfo = await getUserInfo();
+      return { userInfo };
+    } catch (error) {
+      console.error('Failed to initialize chat config:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Handles TRTC custom messages
+   * @param {Object} event - The TRTC event object
+   */
+  function handleTRTCMessage(event) {
+    try {
+      const jsonData = new TextDecoder().decode(event.data);
+      const data = JSON.parse(jsonData);
+
+      switch (data.type) {
+        case MESSAGE_TYPES.CONVERSATION:
+          handleConversationMessage(data);
+          break;
+        case MESSAGE_TYPES.STATE_CHANGE:
+          handleStateChangeMessage(data);
+          break;
+        default:
+          console.warn(`Unknown message type: ${data.type}`);
+      }
+    } catch (error) {
+      console.error('Error processing TRTC message:', error);
+    }
+  }
+
+  /**
+   * Handles conversation messages from the AI
+   * @param {Object} data - The conversation message data
+   */
+  function handleConversationMessage(data) {
+    const sender = data.sender;
+    const text = data.payload.text;
+    const roundId = data.payload.roundid;
+    const isRobot = sender.includes('ai_');
+    const end = data.payload.end;
+
+    const existingMessage = messages.find(
+            msg => msg.id === roundId && msg.sender === sender
+    );
+
+    if (existingMessage) {
+      existingMessage.content = text;
+      existingMessage.end = end;
+    } else {
+      messages.unshift({
+        id: roundId,
+        content: text,
+        sender,
+        type: isRobot ? 'ai' : 'user',
+        end: end
+      });
+    }
+
+    renderChatMessages();
+  }
+
+  /**
+   * Handles state change messages from the AI
+   * @param {Object} data - The state change message data
+   */
+  function handleStateChangeMessage(data) {
+    const state = data.payload.state;
+    const stateText = STATE_LABELS[state] || "Unknown State";
+    updateStatus('ai', stateText);
+  }
+
+  /**
+   * Starts the conversation with the AI
+   */
+  async function startConversation() {
+    try {
+      // Disable start button while connecting
+      startButton.disabled = true;
+      updateStatus('room', "Connecting...");
+
+      const { userInfo } = await initChatConfig();
+      const { sdkAppId, userSig, userId, roomId, robotId } = userInfo;
+
+      // Save user information
+      currentUserId = userId;
+      botUserId = robotId;
+
+      // Initialize TRTC client if not already done
+      trtcClient = trtcClient || TRTC.create();
+
+      // Enter the TRTC room
+      await trtcClient.enterRoom({
+        roomId: parseInt(roomId),
+        scene: "rtc",
+        sdkAppId,
+        userId,
+        userSig,
+      });
+
+      updateStatus('room', "✅ Connected");
+
+      // Set up message handler
+      trtcClient.on(TRTC.EVENT.CUSTOM_MESSAGE, handleTRTCMessage);
+
+      // Start audio
+      await trtcClient.startLocalAudio();
+      console.log('Local audio started successfully');
+
+      // Start AI conversation
+      const response = await startAIConversation(JSON.stringify({ userInfo }));
+      taskId = response.TaskId;
+      console.log('AI conversation started with task ID:', taskId);
+
+      // Enable end button and send button
+      endButton.disabled = false;
+      sendButton.disabled = false;
+    } catch (error) {
+      console.error("Failed to start conversation:", error);
+      updateStatus('room', "Connection Failed");
+      startButton.disabled = false;
+
+      // Display error in chat
+      messages.unshift({
+        id: 'error',
+        content: `Failed to start conversation: ${error.message}`,
+        sender: 'System',
+        type: 'ai',
+        end: true
+      });
+      renderChatMessages();
+    }
+  }
+
+  /**
+   * Stops the conversation with the AI
+   */
+  async function stopConversation() {
+    endButton.disabled = true;
+    sendButton.disabled = true;
+    updateStatus('room', "Disconnecting...");
+
+    try {
+      // Stop the AI conversation task
+      if (taskId) {
+        await stopAIConversation(JSON.stringify({
+          TaskId: taskId,
+        }));
+        console.log('AI conversation stopped successfully');
+      }
+    } catch (error) {
+      console.error('Error stopping AI conversation:', error);
+    }
+
+    try {
+      // Exit the TRTC room
+      if (trtcClient) {
+        await trtcClient.exitRoom();
+        console.log('Successfully exited TRTC room');
+      }
+    } catch (error) {
+      console.error('Error exiting TRTC room:', error);
+    }
+
+    // Clean up resources
+    if (trtcClient) {
+      trtcClient.destroy();
+      trtcClient = null;
+    }
+
+    // Reset UI state
+    taskId = null;
+    updateStatus('room', "Disconnected");
+    updateStatus('ai', "AI NotReady");
+    startButton.disabled = false;
+  }
+
+  /**
+   * Sends a custom text message to the AI
+   */
+  function sendCustomTextMessage() {
+    if (!trtcClient || !textInput.value.trim()) return;
+    
+    try {
+      const messageText = textInput.value.trim();
+      const messageId = Date.now().toString(); // Simple unique ID
+      
+      // Create custom message payload
+      const message = {
+        type: MESSAGE_TYPES.CUSTOM_TEXT,
+        sender: currentUserId,
+        receiver: [botUserId],
+        payload: {
+          id: messageId,
+          message: messageText,
+          timestamp: Date.now()
+        }
+      };
+      
+      // Send the message through TRTC
+      trtcClient.sendCustomMessage({
+        cmdId: 2, // Fixed cmdId as per requirement
+        data: new TextEncoder().encode(JSON.stringify(message)).buffer
+      });
+      
+      // Clear the input field
+      textInput.value = "";
+    } catch (error) {
+      console.error("Failed to send custom message:", error);
+    }
+  }
+
+  /**
+   * Sends an interrupt signal to the AI
+   */
+  function sendInterruptSignal() {
+    if (!trtcClient) return;
+    
+    try {
+      const messageId = Date.now().toString();
+      
+      // Create interrupt signal payload
+      const message = {
+        type: MESSAGE_TYPES.CUSTOM_INTERRUPT,
+        sender: currentUserId,
+        receiver: [botUserId],
+        payload: {
+          id: messageId,
+          timestamp: Date.now()
+        }
+      };
+      
+      // Send the interrupt through TRTC
+      trtcClient.sendCustomMessage({
+        cmdId: 2,
+        data: new TextEncoder().encode(JSON.stringify(message)).buffer
+      });
+      
+      console.log('Interrupt signal sent');
+    } catch (error) {
+      console.error("Failed to send interrupt signal:", error);
+    }
+  }
+
+  // Event listeners
+  sendButton.addEventListener("click", sendCustomTextMessage);
+  
+  // Handle Enter key press in text input
+  textInput.addEventListener("keypress", (event) => {
+    if (event.key === "Enter" && !sendButton.disabled) {
+      sendCustomTextMessage();
+    }
+  });
+</script>
+</body>
+
+</html>
