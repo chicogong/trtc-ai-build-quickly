@@ -313,7 +313,8 @@
     STATE_CHANGE: 10001,
     CUSTOM_TEXT: 20000,
     CUSTOM_INTERRUPT: 20001,
-    ERROR_CALLBACK: 10030
+    ERROR_CALLBACK: 10030,
+    METRICS_CALLBACK: 10020
   };
 
   // DOM Elements
@@ -329,6 +330,17 @@
   let trtcClient = null;
   let currentUserId = null;
   let botUserId = null;
+  
+  // Metrics tracking
+  let metricsData = {
+    asr_latency: [],
+    llm_network_latency: [],
+    llm_first_token: [],
+    tts_network_latency: [],
+    tts_first_frame_latency: [],
+    tts_discontinuity: [],
+    interruption: []
+  };
 
   /**
    * Renders the chat messages in the UI
@@ -486,6 +498,9 @@
         case MESSAGE_TYPES.ERROR_CALLBACK:
           handleErrorCallbackMessage(data);
           break;
+        case MESSAGE_TYPES.METRICS_CALLBACK:
+          handleMetricsMessage(data);
+          break;
         default:
           console.warn(`Unknown message type: ${data.type}`);
       }
@@ -560,6 +575,94 @@
       renderChatMessages();
     } catch (error) {
       console.error('Error processing error callback:', error);
+    }
+  }
+
+  /**
+   * Handles metrics messages from the AI service
+   * @param {Object} data - The metrics message data
+   */
+  function handleMetricsMessage(data) {
+    try {
+      const { payload } = data;
+      const { metric, value, tag } = payload;
+      
+      // Store the metric value in the appropriate array
+      if (metricsData.hasOwnProperty(metric)) {
+        metricsData[metric].push({
+          value,
+          roundId: tag.roundid
+        });
+      }
+      
+      console.log(`Received metric: ${metric} = ${value}ms for round ${tag.roundid}`);
+    } catch (error) {
+      console.error('Error processing metrics callback:', error);
+    }
+  }
+
+  /**
+   * Calculates and displays latency statistics
+   */
+  function displayLatencyStatistics() {
+    try {
+      // Calculate statistics for each metric
+      const statistics = {};
+      const metricLabels = {
+        asr_latency: 'asr',
+        // llm_network_latency: 'llm_net',
+        llm_first_token: 'llm',
+        // tts_network_latency: 'tts_net',
+        tts_first_frame_latency: 'tts ',
+        // tts_discontinuity: 'tts_dic',
+        // interruption: 'interrupt'
+      };
+      
+      Object.keys(metricsData).forEach(metric => {
+        const values = metricsData[metric].map(item => item.value);
+        
+        if (values.length > 0) {
+          const sum = values.reduce((a, b) => a + b, 0);
+          const avg = Math.round(sum / values.length); // Round to integer
+          const min = Math.min(...values);
+          const max = Math.max(...values);
+          
+          statistics[metric] = {
+            count: values.length,
+            avg: avg,
+            min,
+            max
+          };
+        }
+      });
+      
+      let table = "metrics(ms):\n";
+      table += "🕹️  | avg | min | max | *\n";
+      
+      Object.keys(statistics).forEach(metric => {
+        const stat = statistics[metric];
+        const label = metricLabels[metric];
+        if (!label) return; 
+        table += `${label} | ${stat.avg} | ${stat.min} | ${stat.max} | ${stat.count}\n`;
+      });
+      
+      // If no metrics were recorded
+      if (Object.keys(statistics).length === 0) {
+        table = "No latency metrics recorded";
+      }
+      
+      // Add the summary to the chat
+      messages.unshift({
+        id: `stats-${Date.now()}`,
+        content: table,
+        sender: 'System',
+        type: 'ai',
+        end: true
+      });
+      
+      renderChatMessages();
+    } catch (error) {
+      console.error('Error calculating metrics statistics:', error);
     }
   }
 
@@ -657,14 +760,26 @@
       console.error('Error exiting TRTC room:', error);
     }
 
+    // Display metrics statistics
+    displayLatencyStatistics();
+    
     // Clean up resources
     if (trtcClient) {
       trtcClient.destroy();
       trtcClient = null;
     }
 
-    // Reset UI state
+    // Reset UI state and metrics data
     taskId = null;
+    metricsData = {
+      asr_latency: [],
+      llm_network_latency: [],
+      llm_first_token: [],
+      tts_network_latency: [],
+      tts_first_frame_latency: [],
+      tts_discontinuity: [],
+      interruption: []
+    };
     updateStatus('room', "Disconnected");
     updateStatus('ai', "AI NotReady");
     startButton.disabled = false;
