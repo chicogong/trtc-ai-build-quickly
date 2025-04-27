@@ -12,9 +12,23 @@
 <body>
   <div id="app">
     <h5 class="app-title">TRTC Conversational AI</h5>
-    <div id="status-container">
-      <div id="room-status" class="status-indicator">RTC Not Ready</div>
-      <div id="ai-state" class="status-indicator">AI Not Ready</div>
+    <div id="status-volume-container">
+      <div id="status-container">
+        <div id="room-status" class="status-indicator">RTC Not Ready</div>
+        <div id="ai-state" class="status-indicator">AI Not Ready</div>
+      </div>
+      <div class="volume-indicators">
+        <div class="volume-container">
+          <div class="volume-bar-container">
+            <div id="userVolumeBar" class="volume-bar"></div>
+          </div>
+        </div>
+        <div class="volume-container">
+          <div class="volume-bar-container">
+            <div id="aiVolumeBar" class="volume-bar"></div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="chat-list"></div>
     <div class="input-container">
