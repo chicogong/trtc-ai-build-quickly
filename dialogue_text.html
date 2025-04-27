@@ -206,6 +206,19 @@
       border-color: rgba(204, 119, 119, 0.3);
     }
 
+    .interrupt-button {
+      background-color: #FFF5E6;
+      color: #E67E22;
+      border-color: rgba(230, 126, 34, 0.3);
+      position: relative;
+    }
+
+    .interrupt-button:before {
+      content: "✋";
+      margin-right: 5px;
+      font-size: 14px;
+    }
+
     button:hover {
       opacity: 0.9;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -274,7 +287,8 @@
     <button id="send-button" disabled class="send-button">Send</button>
   </div>
   <div class="button-container">
-    <button class="start-button" onclick="startConversation()">Call</button>
+    <button class="start-button" onclick="startConversation()">Call AI</button>
+    <button id="interrupt-button" disabled class="interrupt-button">Interrupt</button>
     <button class="end-button" disabled onclick="stopConversation()">Hangup</button>
   </div>
 </div>
@@ -308,7 +322,7 @@
   const endButton = document.querySelector(".end-button");
   const textInput = document.getElementById("text-input");
   const sendButton = document.getElementById("send-button");
-
+  const interruptButton = document.getElementById("interrupt-button");
   // Application state
   let messages = [];
   let taskId = null;
@@ -594,6 +608,7 @@
       // Enable end button and send button
       endButton.disabled = false;
       sendButton.disabled = false;
+      interruptButton.disabled = false;
     } catch (error) {
       console.error("Failed to start conversation:", error);
       updateStatus('room', "Connection Failed");
@@ -617,6 +632,7 @@
   async function stopConversation() {
     endButton.disabled = true;
     sendButton.disabled = true;
+    interruptButton.disabled = true;
     updateStatus('room', "Disconnecting...");
 
     try {
@@ -723,6 +739,7 @@
 
   // Event listeners
   sendButton.addEventListener("click", sendCustomTextMessage);
+  interruptButton.addEventListener("click", sendInterruptSignal);
   
   // Handle Enter key press in text input
   textInput.addEventListener("keypress", (event) => {
