@@ -298,7 +298,8 @@
     CONVERSATION: 10000,
     STATE_CHANGE: 10001,
     CUSTOM_TEXT: 20000,
-    CUSTOM_INTERRUPT: 20001
+    CUSTOM_INTERRUPT: 20001,
+    ERROR_CALLBACK: 10030
   };
 
   // DOM Elements
@@ -468,6 +469,9 @@
         case MESSAGE_TYPES.STATE_CHANGE:
           handleStateChangeMessage(data);
           break;
+        case MESSAGE_TYPES.ERROR_CALLBACK:
+          handleErrorCallbackMessage(data);
+          break;
         default:
           console.warn(`Unknown message type: ${data.type}`);
       }
@@ -515,6 +519,34 @@
     const state = data.payload.state;
     const stateText = STATE_LABELS[state] || "Unknown State";
     updateStatus('ai', stateText);
+  }
+
+  /**
+   * Handles error callback messages from the AI service
+   * @param {Object} data - The error callback message data
+   */
+  function handleErrorCallbackMessage(data) {
+    try {
+      const { payload } = data;
+      const { metric, tag } = payload;
+      const { roundid, code, message: errorMessage } = tag;
+      console.error(`AI Service Error: ${metric} (${code}): ${errorMessage}`);
+      
+      const displayMessage = `${metric} (${code}): ${errorMessage}`;
+      
+      // Add error message to chat as system message
+      messages.unshift({
+        id: `error-${Date.now()}`,
+        content: displayMessage,
+        sender: 'System',
+        type: 'ai',
+        end: true
+      });
+      
+      renderChatMessages();
+    } catch (error) {
+      console.error('Error processing error callback:', error);
+    }
   }
 
   /**
