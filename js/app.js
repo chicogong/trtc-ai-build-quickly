@@ -4,6 +4,13 @@
 
 // Application state
 let taskId = null;
+let muteState = false;
+
+/**
+ * ===========================================
+ * MAIN APPLICATION FUNCTIONS
+ * ===========================================
+ */
 
 /**
  * Starts the conversation with the AI
@@ -35,10 +42,11 @@ async function startConversation() {
     taskId = response.TaskId;
     console.log('AI conversation started with task ID:', taskId);
 
-    // Enable end button and send button
+    // Enable control buttons
     endButton.disabled = false;
     sendButton.disabled = false;
     interruptButton.disabled = false;
+    muteButton.disabled = false;
   } catch (error) {
     console.error("Failed to start conversation:", error);
     updateStatus('room', "Connection Failed");
@@ -57,6 +65,10 @@ async function stopConversation() {
   endButton.disabled = true;
   sendButton.disabled = true;
   interruptButton.disabled = true;
+  muteButton.disabled = true;
+  muteButton.textContent = 'Mute';
+  muteButton.classList.remove('muted');
+  muteState = false;
   updateStatus('room', "Disconnecting...");
 
   try {
@@ -91,6 +103,12 @@ async function stopConversation() {
 }
 
 /**
+ * ===========================================
+ * UI INTERACTION FUNCTIONS
+ * ===========================================
+ */
+
+/**
  * Send a text message from the input field
  */
 function handleSendMessage() {
@@ -99,13 +117,39 @@ function handleSendMessage() {
   }
 }
 
-// Event listeners
-document.addEventListener('DOMContentLoaded', () => {
-  // Button event listeners
+/**
+ * Toggle mute state
+ */
+async function handleToggleMute() {
+  muteState = !muteState;
+  const success = await toggleMute(muteState);
+  if (success) {
+    muteButton.textContent = muteState ? 'Unmute' : 'Mute';
+    // Update the before content using a CSS class
+    if (muteState) {
+      muteButton.classList.add('muted');
+    } else {
+      muteButton.classList.remove('muted');
+    }
+  }
+}
+
+/**
+ * ===========================================
+ * INITIALIZATION AND EVENT LISTENERS
+ * ===========================================
+ */
+
+/**
+ * Initialize the application
+ */
+function initializeApp() {
+  // Set up event listeners
   startButton.addEventListener('click', startConversation);
   endButton.addEventListener('click', stopConversation);
   sendButton.addEventListener('click', handleSendMessage);
   interruptButton.addEventListener('click', sendInterruptSignal);
+  muteButton.addEventListener('click', handleToggleMute);
   
   // Handle Enter key press in text input
   textInput.addEventListener('keypress', (event) => {
@@ -113,4 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
       handleSendMessage();
     }
   });
-}); 
+}
+
+// Initialize when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', initializeApp); 

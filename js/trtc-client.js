@@ -8,6 +8,12 @@ let currentUserId = null;
 let botUserId = null;
 
 /**
+ * ===========================================
+ * TRTC INITIALIZATION AND CORE FUNCTIONALITY
+ * ===========================================
+ */
+
+/**
  * Initialize TRTC client
  * @returns {Object} The TRTC client instance
  */
@@ -86,6 +92,36 @@ function setUserIds(userId, aiUserId) {
 }
 
 /**
+ * ===========================================
+ * AUDIO CONTROL FUNCTIONS
+ * ===========================================
+ */
+
+/**
+ * Toggle mute status for local audio
+ * @param {boolean} mute - Whether to mute (true) or unmute (false)
+ * @returns {Promise} Promise that resolves when mute status is updated
+ */
+async function toggleMute(mute) {
+  if (!trtcClient) return false;
+  
+  try {
+    await trtcClient.updateLocalAudio({ mute: mute });
+    console.log(`Local audio ${mute ? 'muted' : 'unmuted'} successfully`);
+    return true;
+  } catch (error) {
+    console.error('Error toggling mute status:', error);
+    return false;
+  }
+}
+
+/**
+ * ===========================================
+ * MESSAGING FUNCTIONS
+ * ===========================================
+ */
+
+/**
  * Send a custom text message to the AI
  * @param {string} message - The message to send
  */
@@ -155,6 +191,12 @@ function sendInterruptSignal() {
     return false;
   }
 }
+
+/**
+ * ===========================================
+ * MESSAGE HANDLERS
+ * ===========================================
+ */
 
 /**
  * Handles TRTC custom messages
@@ -248,6 +290,12 @@ function handleMetricsMessage(data) {
   }
 }
 
+/**
+ * ===========================================
+ * AUDIO VISUALIZATION
+ * ===========================================
+ */
+
 // Track previous volume levels for smoother transitions
 let prevUserVolume = 0;
 let prevAiVolume = 0;
@@ -314,7 +362,5 @@ function updateVolumeBar(elementId, volume) {
     } else {
       volumeBar.classList.remove('active');
     }
-    
-    // No need for manual decay with higher frequency updates and smoothing
   }
 }

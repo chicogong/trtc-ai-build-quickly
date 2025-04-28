@@ -1,4 +1,6 @@
-/* Main layout */
+/* ===========================================
+   MAIN LAYOUT
+   =========================================== */
 body {
   font-family: Arial, sans-serif;
   background-color: #fcfcfc;
@@ -37,7 +39,9 @@ body {
   border-radius: 2px;
 }
 
-/* Add new container for status and volume */
+/* ===========================================
+   STATUS AND VOLUME INDICATORS
+   =========================================== */
 #status-volume-container {
   display: flex;
   justify-content: space-between;
@@ -76,7 +80,9 @@ body {
   border-color: rgba(119, 119, 119, 0.1);
 }
 
-/* Chat messages section */
+/* ===========================================
+   CHAT MESSAGES
+   =========================================== */
 .chat-list {
   width: 100%;
   height: 400px;
@@ -179,7 +185,9 @@ body {
   color: #555;
 }
 
-/* Button styles */
+/* ===========================================
+   BUTTONS
+   =========================================== */
 .button-container {
   display: flex;
   justify-content: center;
@@ -222,6 +230,23 @@ button {
   font-size: 14px;
 }
 
+.mute-button {
+  background-color: #F5F5FF;
+  color: #6A5ACD;
+  border-color: rgba(106, 90, 205, 0.3);
+  position: relative;
+}
+
+.mute-button:before {
+  content: "🔊";
+  margin-right: 5px;
+  font-size: 14px;
+}
+
+.mute-button.muted:before {
+  content: "🔇";
+}
+
 button:hover {
   opacity: 0.9;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -233,7 +258,9 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* Text input styles */
+/* ===========================================
+   TEXT INPUT
+   =========================================== */
 .input-container {
   display: flex;
   width: 100%;
@@ -275,7 +302,9 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* Volume indicators */
+/* ===========================================
+   VOLUME VISUALIZATION
+   =========================================== */
 .volume-indicators {
   display: flex;
   justify-content: flex-end;
@@ -320,6 +349,9 @@ button:disabled {
   animation: gradientShift 3s ease infinite;
 }
 
+/* ===========================================
+   ANIMATIONS
+   =========================================== */
 @keyframes gradientShift {
   0% {
     background-position: 0% 50%;
@@ -349,7 +381,9 @@ button:disabled {
   }
 }
 
-/* Mobile responsive styles */
+/* ===========================================
+   RESPONSIVE DESIGN
+   =========================================== */
 @media (max-width: 600px) {
   #status-volume-container {
     flex-direction: column;

@@ -5,13 +5,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TRTC-AI Conversation</title>
+  <!-- TRTC SDK -->
   <script src='https://web.sdk.qcloud.com/trtc/webrtc/v5/dist/trtc.js'></script>
+  <!-- Application styles -->
   <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
   <div id="app">
     <h5 class="app-title">TRTC Conversational AI</h5>
+    
+    <!-- Status and volume indicators -->
     <div id="status-volume-container">
       <div id="status-container">
         <div id="room-status" class="status-indicator">RTC Not Ready</div>
@@ -20,28 +24,36 @@
       <div class="volume-indicators">
         <div class="volume-container">
           <div class="volume-bar-container">
-            <div id="userVolumeBar" class="volume-bar"></div>
+            <div id="aiVolumeBar" class="volume-bar"></div>
           </div>
         </div>
         <div class="volume-container">
           <div class="volume-bar-container">
-            <div id="aiVolumeBar" class="volume-bar"></div>
+            <div id="userVolumeBar" class="volume-bar"></div>
           </div>
         </div>
       </div>
     </div>
+    
+    <!-- Chat messages area -->
     <div class="chat-list"></div>
+    
+    <!-- Message input -->
     <div class="input-container">
       <input type="text" id="text-input" placeholder="Type a message..." class="text-input">
       <button id="send-button" disabled class="send-button">Send</button>
     </div>
+    
+    <!-- Control buttons -->
     <div class="button-container">
       <button id="start-button" class="start-button">Call AI</button>
       <button id="interrupt-button" disabled class="interrupt-button">Interrupt</button>
+      <button id="mute-button" disabled class="mute-button">Mute</button>
       <button id="end-button" disabled class="end-button">Hangup</button>
     </div>
   </div>
 
+  <!-- Application scripts -->
   <script src="js/constants.js"></script>
   <script src="js/api.js"></script>
   <script src="js/ui.js"></script>
