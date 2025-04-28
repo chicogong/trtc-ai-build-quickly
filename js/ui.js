@@ -90,9 +90,29 @@ function addMessage(sender, content, type, id, end = true) {
 /**
  * Adds a system message to the chat
  * @param {string} content - The message content
+ * @param {boolean} isHTML - Whether the content is HTML that should be rendered
  */
-function addSystemMessage(content) {
-  addMessage('System', content, 'ai', `system-${Date.now()}`);
+function addSystemMessage(content, isHTML = false) {
+  const chatList = document.querySelector('.chat-list');
+  const chatItem = document.createElement('div');
+  chatItem.className = 'chat-item ai';
+  
+  const chatId = document.createElement('div');
+  chatId.className = 'chat-id';
+  chatId.textContent = 'System';
+  
+  const chatText = document.createElement('div');
+  chatText.className = 'chat-text';
+  
+  if (isHTML) {
+    chatText.innerHTML = content;
+  } else {
+    chatText.textContent = content;
+  }
+  
+  chatItem.appendChild(chatId);
+  chatItem.appendChild(chatText);
+  chatList.insertBefore(chatItem, chatList.firstChild);
 }
 
 /**

@@ -30,6 +30,16 @@ const CONFIG = {
         expireTime: 10 * 60 * 60  // User signature 10 hours expiration time (seconds)
     },
 
+    // Agent card information
+    AgentCard: {
+        name: "TRTC Assistant",
+        avatar: "assets/avatar.png",
+        description: "I'm your AI assistant powered by TRTC technology. I can help answer questions and have natural conversations.",
+        capabilities: ["Real-time conversation", "Voice interaction", "Question answering", "Information lookup"],
+        voiceType: "Professional female voice (customer-service)",
+        personality: "Friendly, helpful, and knowledgeable"
+    },
+
     // Agent configuration
     AgentConfig: {
         WelcomeMessage: "How are you",  // First words spoken by the AI as they enter the room
@@ -63,7 +73,7 @@ const CONFIG = {
         TTSType: "minimax",  // TTS provider
         GroupId: "180000000000",
         APIKey: "AyMTgwOxxxxxxxxxxxxxx",
-        VoiceType: "kefu-herui3",  // Use real customer service voice clone
+        VoiceType: "customer-service-voice-clone",  // Use real customer service voice clone
         APIUrl: "https://api.minimax.chat/v1/t2a_v2",
         Model: "speech-01-turbo",
         Speed: 1  // Speech speed adjustment for different scenarios
@@ -172,6 +182,20 @@ app.post('/getInfo', (req, res) => {
         });
     } catch (error) {
         console.error('Failed to generate user information:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * Get agent card information
+ * GET /getAgentInfo
+ */
+app.get('/getAgentInfo', (req, res) => {
+    try {
+        // Return the agent card configuration
+        res.json(CONFIG.AgentCard);
+    } catch (error) {
+        console.error('Failed to get agent information:', error);
         res.status(500).json({ error: error.message });
     }
 });
