@@ -4,22 +4,52 @@
  */
 
 /**
+ * Builds HTML for capabilities list
+ * @param {string[]} capabilities - List of agent capabilities
+ * @returns {string} HTML string for capabilities
+ */
+function buildCapabilitiesHTML(capabilities) {
+  return capabilities.map(cap => `<div class="capability-item">${cap}</div>`).join('');
+}
+
+/**
+ * Builds the complete agent card HTML
+ * @param {Object} agentInfo - Agent information object
+ * @returns {string} Complete card HTML string
+ */
+function buildCardHTML(agentInfo) {
+  return (
+    '<div class="chat-agent-card">' +
+      '<div class="agent-header">' +
+        `<img src="${agentInfo.avatar}" alt="AI" class="agent-avatar">` +
+        '<div class="agent-info">' +
+          `<div class="agent-name">${agentInfo.name}</div>` +
+          `<div class="agent-voice">${agentInfo.voiceType}</div>` +
+        '</div>' +
+      '</div>' +
+      `<div class="agent-description">${agentInfo.description}</div>` +
+      '<div class="agent-capabilities">' +
+        '<div class="capabilities-title">I can help you:</div>' +
+        `<div class="capabilities-list">${buildCapabilitiesHTML(agentInfo.capabilities)}</div>` +
+      '</div>' +
+      '<div class="agent-personality">' +
+        '<span class="personality-label">Personality：</span>' +
+        `<span class="personality-text">${agentInfo.personality}</span>` +
+      '</div>' +
+    '</div>'
+  );
+}
+
+/**
  * Fetches the agent card information from the server
- * @returns {Promise<Object>} The agent card information
+ * @returns {Promise<Object>} Agent information object
  */
 async function getAgentCardInfo() {
   try {
-    const response = await fetch(`${API_BASE_URL}/getAgentInfo`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      }
-    });
-
+    const response = await fetch(`${API_BASE_URL}/getAgentInfo`);
     if (!response.ok) {
       throw new Error(`Failed to fetch agent info: ${response.status}`);
     }
-
     return await response.json();
   } catch (error) {
     console.error('Error getting agent info:', error);
@@ -28,48 +58,34 @@ async function getAgentCardInfo() {
       name: "TRTC Assistant",
       avatar: "assets/avatar.png",
       description: "I'm your AI assistant powered by TRTC technology.",
-      capabilities: ["Conversation", "Information"],
-      voiceType: "Professional female voice (kefu-herui3)",
+      capabilities: ["Real-time conversation", "Voice interaction", "Question answering", "Information lookup"],
+      voiceType: "Professional female voice (custom-service)",
       personality: "Helpful and friendly"
     };
   }
 }
 
 /**
- * Creates and displays the agent info as a chat message
- * @param {Object} agentInfo - The agent information
+ * Displays the agent card in the chat
+ * @param {Object} agentInfo - Agent information object
  */
 function displayAgentCard(agentInfo) {
-  const capabilities = agentInfo.capabilities.map(cap => `<div class="capability-item">${cap}</div>`).join('');
+  if (!agentInfo || typeof agentInfo !== 'object') {
+    console.error('Invalid agent info');
+    return;
+  }
+
+  const cardContent = buildCardHTML(agentInfo);
   
-  const cardContent = 
-    '<div class="chat-agent-card">' +
-    '<div class="agent-header">' +
-    `<img src="${agentInfo.avatar}" alt="AI" class="agent-avatar">` +
-    '<div class="agent-info">' +
-    `<div class="agent-name">${agentInfo.name}</div>` +
-    `<div class="agent-voice">${agentInfo.voiceType}</div>` +
-    '</div></div>' +
-    `<div class="agent-description">${agentInfo.description}</div>` +
-    '<div class="agent-capabilities">' +
-    '<div class="capabilities-title">我可以帮你：</div>' +
-    `<div class="capabilities-list">${capabilities}</div>` +
-    '</div>' +
-    '<div class="agent-personality">' +
-    '<span class="personality-label">个性：</span>' +
-    `<span class="personality-text">${agentInfo.personality}</span>` +
-    '</div></div>';
-  
-  // Add to chat as a system message
   if (typeof addSystemMessage === 'function') {
     addSystemMessage(cardContent, true);
   } else {
-    console.error('addSystemMessage function not found');
+    console.error('System message function not found');
   }
 }
 
 /**
- * Initialize the agent card
+ * Initializes the agent card
  */
 async function initializeAgentCard() {
   try {
