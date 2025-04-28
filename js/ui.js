@@ -9,6 +9,7 @@ const endButton = document.getElementById("end-button");
 const textInput = document.getElementById("text-input");
 const sendButton = document.getElementById("send-button");
 const interruptButton = document.getElementById("interrupt-button");
+const muteButton = document.getElementById("mute-button");
 
 // Chat messages array
 let messages = [];
