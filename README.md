@@ -35,15 +35,16 @@ TRTC AI Build Quickly 是一个基于腾讯云 TRTC 的快速 AI 应用构建平
 | Agent 类型 | 核心功能 | 适用场景 | 实现状态 |
 |------------|---------|---------|---------|
 | 外呼客服 Agent | 自动外呼、智能话术、质量监控 | 营销、客服回访 | ✅ 已实现 |
-| 甜妹陪聊 Agent | 自然交互、情感超拟人对话、个性化陪伴 | 社交、娱乐 | 🔄 开发中 |
-| 声纹锁定 Agent | 声纹锁定、过滤周边人声、保证高质量通话 | 办公室，街道等嘈杂场景 | 🔄 开发中 |
-| MCP Agent | 接入[MCP](https://github.com/modelcontextprotocol)扩展工具调用等功能 | 更便捷的工具调用 | 🔄 开发中 |
+| 甜妹陪聊 Agent | 自然交互、情感超拟人对话、个性化陪伴 | 社交、娱乐 | ✅ 已实现 |
+| 声纹锁定 Agent | 声纹锁定、过滤周边人声、保证高质量通话 | 办公室，街道等嘈杂场景 | ✅ 已实现 |
+| MCP Agent | 接入[MCP](https://github.com/modelcontextprotocol)扩展工具调用等功能 | 更便捷的工具调用 | ✅ 已实现 |
 | A2A Agent | 接入[A2A](https://github.com/google/A2A)协议 | 多Agent对话 | 🔄 开发中 |
 | Coze Agent | 接入 [Coze](https://www.coze.com) 平台能力 | 快速构建智能对话应用 | 🔄 开发中 |
 | Dify Agent | 接入 [Dify](https://dify.ai) 平台能力 | 企业级 AI 应用开发 | 🔄 开发中 |
 | 知识引擎 Agent | 接入[腾讯云知识引擎](https://cloud.tencent.com/product/lke) 企业级知识库解决方案 | 智能问答、知识库查询 | 🔄 开发中 |
 
 </div>
+如果需要某个Agent可以留言，我们会尽快为您提供。
 当然，您也可以根据您的需求，创建自己的Agent。
 也可以将您的AgentCard贡献到这个项目中，让更多的人使用您的Agent。
 
