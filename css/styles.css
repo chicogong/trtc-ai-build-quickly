@@ -429,4 +429,95 @@ button:disabled {
   .volume-bar {
     border-radius: 8px;
   }
+}
+
+/* Agent Card Styles */
+.chat-agent-card {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 6px 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.agent-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.agent-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.agent-info {
+  flex: 1;
+}
+
+.agent-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 2px;
+}
+
+.agent-voice {
+  font-size: 11px;
+  color: #666;
+}
+
+.agent-description {
+  font-size: 12px;
+  color: #444;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.agent-capabilities {
+  margin-bottom: 8px;
+}
+
+.capabilities-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.capabilities-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.capability-item {
+  background: #e9ecef;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  color: #495057;
+}
+
+.agent-personality {
+  font-size: 11px;
+  color: #666;
+}
+
+.personality-label {
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.personality-text {
+  color: #495057;
+}
+
+.chat-item.ai .chat-text .chat-agent-card {
+  margin: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
 } 
