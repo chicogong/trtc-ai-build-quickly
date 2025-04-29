@@ -22,7 +22,7 @@ WORKDIR /app
 # Copy build results and dependencies from builder stage
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/server.js ./
-COPY --from=builder /app/assets ./assets
+COPY --from=builder /app/agent_cards ./agent_cards
 COPY --from=builder /app/css ./css
 COPY --from=builder /app/js ./js
 COPY --from=builder /app/index.html ./
