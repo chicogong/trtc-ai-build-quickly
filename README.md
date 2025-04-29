@@ -34,7 +34,7 @@ For detailed integration guide, please refer to the [official documentation](htt
 
 Here's a simple conversation example:
 
-![Dialogue Interface Demo](dialogue.png)
+![Dialogue Interface Demo](docs/images/dialogue.png)
 
 The demo shows:
 - Real-time conversation interface
@@ -174,7 +174,7 @@ For detailed pricing, please refer to [AI Real-time Conversation Pricing](https:
    5. Access the system-assigned public domain to use the service
 
    CloudBase service configuration example:
-   ![CloudBase Configuration Example](cloudbase.png)
+   ![CloudBase Configuration Example](docs/images/cloudbase.png)
    > The image shows the CloudBase Cloud Run service creation configuration page. Follow the options shown in the image to complete the deployment
 
 5. Verify service:

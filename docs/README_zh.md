@@ -35,7 +35,7 @@ TRTC-AI 是一个灵活的集成解决方案，整合了以下核心能力：
 
 下面是一个简单的对话示例：
 
-![对话界面示例](dialogue.png)
+![对话界面示例](images/dialogue.png)
 
 该示例展示了：
 - 实时对话界面
@@ -177,7 +177,7 @@ TRTC-AI 是一个灵活的集成解决方案，整合了以下核心能力：
    5. 访问系统分配的公网域名即可使用
 
    CloudBase 服务配置示例：
-   ![CloudBase配置示例](cloudbase.png)
+   ![CloudBase配置示例](images/cloudbase.png)
    > 图示为 CloudBase 云托管服务创建配置页面，按图示选择对应选项即可完成部署
 
 5. 验证服务：
