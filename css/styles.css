@@ -515,7 +515,6 @@ button:disabled {
   color: #495057;
 }
 
-/* 确保卡片在聊天消息中的样式 */
 .chat-item.ai .chat-text .chat-agent-card {
   margin: 0;
   background: transparent;
