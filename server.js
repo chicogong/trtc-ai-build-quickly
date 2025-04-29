@@ -18,9 +18,10 @@ const TLSSigAPIv2 = require('tls-sig-api-v2');
 const CONFIG = {
     // Tencent Cloud API client configuration
     apiConfig: {
-        SecretId: "xx",      // [Required] Replace with your actual SecretId
-        SecretKey: "xx",     // [Required] Replace with your actual SecretKey
-        Region: "ap-beijing" // API access to the nearest region
+        secretId: "xx",      // [Required] Replace with your actual SecretId
+        secretKey: "xx",     // [Required] Replace with your actual SecretKey
+        region: "ap-beijing", // API access to the nearest region
+        endpoint: "trtc.tencentcloudapi.com"
     },
 
     // TRTC configuration
@@ -84,13 +85,13 @@ const TrtcClient = tencentcloud.trtc.v20190722.Client;
 
 const clientConfig = {
     credential: {
-        secretId: CONFIG.apiConfig.SecretId,
-        secretKey: CONFIG.apiConfig.SecretKey,
+        secretId: CONFIG.apiConfig.secretId,
+        secretKey: CONFIG.apiConfig.secretKey,
     },
-    region: CONFIG.apiConfig.Region,
+    region: CONFIG.apiConfig.region,
     profile: {
         httpProfile: {
-            endpoint: "trtc.tencentcloudapi.com",
+            endpoint: CONFIG.apiConfig.endpoint,
         },
     },
 };
