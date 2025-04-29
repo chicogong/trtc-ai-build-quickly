@@ -87,7 +87,7 @@ node server.js [agent_type]
 
 ```
 trtc-ai-build-quickly/
-├── agent_cards/          # Agent 配置文件
+├── agent_cards/         # Agent 配置文件
 │   ├── index.js         # Agent 配置入口
 │   └── default.js       # 默认 Agent 配置
 ├── docs/                # 文档
