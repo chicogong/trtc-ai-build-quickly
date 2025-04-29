@@ -25,6 +25,7 @@ TRTC AI Build Quickly 是一个基于腾讯云 TRTC 的快速 AI 应用构建平
 - ⚙️ **灵活配置**：支持自定义 Agent 配置，轻松扩展新功能
 - 🛡️ **稳定可靠**：依托 TRTC 强大的音视频能力，确保通话质量
 - 🎨 **简单易用**：提供简洁的 API 接口，降低开发门槛
+- 🌐 **多Agent支持**：支持多种Agent类型，满足不同场景需求
 
 ## 🎮 Agent Card 展示
 
@@ -62,12 +63,12 @@ npm install
 
 | 配置项 | 必需字段 | 获取链接 |
 |--------|---------|---------|
-| apiConfig | SecretId, SecretKey | [腾讯云 API 密钥](https://console.cloud.tencent.com/cam/capi) |
+| apiConfig | secretId, secretKey | [腾讯云 API 密钥](https://console.cloud.tencent.com/cam/capi) |
 | trtcConfig | sdkAppId, secretKey | [TRTC 控制台](https://console.cloud.tencent.com/trtc/app) |
 | LLMConfig | APIKey, APIUrl | 从您的 LLM 服务提供商获取 |
 | TTSConfig | 选择以下其中一种：<br>• 腾讯云 TTS:<br>  - AppId: [TTS 控制台](https://console.cloud.tencent.com/tts)<br>  - SecretId, SecretKey: [腾讯云 API 密钥](https://console.cloud.tencent.com/cam/capi)<br>• Minimax TTS:<br>  - GroupId, APIKey, VoiceType: 从 Minimax 控制台获取 |
 
-开通详细指引: [中文](./docs/README_zh.md) | [English](./docs/README.md)
+开通、接入、部署的详细指引: [中文](./docs/README_zh.md) | [English](./docs/README.md)
 
 ### 3. 启动应用
 
@@ -85,21 +86,25 @@ node server.js [agent_type]
 |------------|---------|------|
 | Default Agent | `node server.js default` | 默认 Agent |
 | Sweet Girl | `node server.js sweet_girl` | 甜妹陪聊 Agent |
+| MCP Tencent Map | `node server.js mcp_tencent_map` | MCP 腾讯地图 Agent |
 
 
 ## 📦 项目结构
 
 ```
 trtc-ai-build-quickly/
-├── agent_cards/         # Agent 配置文件
-│   ├── index.js         # Agent 配置入口
-│   └── default.js       # 默认 Agent 配置
-├── docs/                # 文档
-│   └── images/          # 图片资源
-├── index.html           # 对话界面
-├── server.js            # 服务器入口
-├── package.json         # 项目依赖
-└── README.md            # 项目说明
+├── agent_cards/           # Agent 配置文件
+│   ├── index.js           # Agent 配置入口
+│   ├── assets/            # 静态资源/Agent Card 图片
+│   ├── sweet_girl.js      # 甜妹陪聊 Agent 配置
+│   ├── mcp_tencent_map.js # MCP 腾讯地图 Agent 配置
+│   └── default.js         # 默认 Agent 配置
+├── docs/                  # 文档
+│   └── images/            # 图片资源
+├── index.html             # 对话界面
+├── server.js              # 服务器入口
+├── package.json           # 项目依赖
+└── README.md              # 项目说明
 ```
 
 ## 🤝 贡献指南
@@ -119,7 +124,7 @@ trtc-ai-build-quickly/
 
 ## 🙏 
 
-感谢您使用TRTC-AI!
+感谢您使用TRTC-AI !!
 
 <div align="center">
   <sub>Built with ❤️ by TRTC AI Team</sub>
