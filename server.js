@@ -43,7 +43,7 @@ app.use((req, res, next) => {
     next();
 });
 app.use(express.static(__dirname));
-app.get('/', (req, res) => { res.sendFile(path.join(__dirname, 'dialogue.html')) });
+app.get('/', (req, res) => { res.sendFile(path.join(__dirname, 'index.html')) });
 
 app.post('/startConversation', (req, res) => {
     const { userInfo } = req.body;
@@ -139,5 +139,5 @@ const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '127.0.0.1';
 
 app.listen(PORT, HOST, () => { 
-    console.log(`Server running at http://${HOST}:${PORT}/`);
+    console.log(`App running at http://${HOST}:${PORT}/`);
 });
