@@ -18,6 +18,8 @@
 
 TRTC AI Build Quickly 是一个基于腾讯云 TRTC 的快速 AI 应用构建平台，让您轻松打造智能语音交互应用。通过简单的配置，即可实现多种 AI 对话场景，如智能客服、语音助手、情感陪聊等。
 
+[Deepwiki for TRTC AI Build Quickly](https://deepwiki.com/chicogong/trtc-ai-build-quickly)
+
 ## 🌟 核心特性
 
 - 🎯 **快速集成**：基于 TRTC SDK，快速实现音视频通话功能
