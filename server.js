@@ -13,7 +13,6 @@ const agentConfig = require('./agent_cards');
 const agentCardFile = process.argv[2] || 'default';
 const CONFIG = agentConfig[agentCardFile].CONFIG;
 
-
 const TrtcClient = tencentcloud.trtc.v20190722.Client;
 
 const clientConfig = {
@@ -84,36 +83,21 @@ app.post('/stopConversation', (req, res) => {
 app.post('/getInfo', (req, res) => {
     try {
         const { sdkAppId, secretKey, expireTime } = CONFIG.trtcConfig;
-
-        // Generate a random ID between 100000 and 999999
-        const generateRandomId = () => Math.floor(100000 + Math.random() * 900000).toString();
-
-        const randomNum = generateRandomId();
+        const randomNum = Math.floor(100000 + Math.random() * 900000).toString();
         const userId = `user_${randomNum}`;
         const robotId = `ai_${randomNum}`;
         const roomId = parseInt(randomNum);
-
         // Generate user signatures
         const api = new TLSSigAPIv2.Api(sdkAppId, secretKey);
         const userSig = api.genSig(userId, expireTime);
         const robotSig = api.genSig(robotId, expireTime);
-
+        
         console.log('Generated user information:', {
-            time: new Date().toLocaleString(),
-            roomId: roomId,
-            userId: userId,
-            robotId: robotId,
+            time: new Date().toLocaleString(), roomId, userId, robotId,
             expire: `${Math.floor(expireTime/3600)}h`
         });
-
-        res.json({
-            sdkAppId,
-            userSig,
-            robotSig,
-            userId,
-            robotId,
-            roomId
-        });
+        
+        res.json({ sdkAppId, userSig, robotSig, userId, robotId, roomId });
     } catch (error) {
         console.error('Failed to generate user information:', error);
         res.status(500).json({ error: error.message });
@@ -126,7 +110,6 @@ app.post('/getInfo', (req, res) => {
  */
 app.get('/getAgentInfo', (req, res) => {
     try {
-        // Return the agent card configuration
         res.json(CONFIG.AgentCard);
         console.log("get agent card info: ", CONFIG.AgentCard);
     } catch (error) {
