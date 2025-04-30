@@ -96,13 +96,19 @@ node server.js [agent_type]
 ```
 trtc-ai-build-quickly/
 ├── agent_cards/           # Agent 配置文件
-│   ├── index.js           # Agent 配置入口
-│   ├── assets/            # 静态资源/Agent Card 图片
-│   ├── sweet_girl.js      # 甜妹陪聊 Agent 配置
-│   ├── mcp_tencent_map.js # MCP 腾讯地图 Agent 配置
-│   └── default.js         # 默认 Agent 配置
+│   ├── index.js             # Agent 配置入口
+│   ├── assets/              # 静态资源/Agent Card 图片
+│   ├── sweet_girl.js        # 甜妹陪聊 Agent 配置
+│   ├── mcp_tencent_map.js   # MCP 腾讯地图 Agent 配置
+│   └── default.js           # 默认 Agent 配置
+├── css/                     # 样式文件
 ├── docs/                  # 文档
-│   └── images/            # 图片资源
+│   └── images/               # 图片资源
+├── js/                    # 前端js文件
+├── templates/             # 模板文件
+│   ├── dialogue.html         # 简单对话界面模版
+│   └── dialogue_text.html    # 简单对话+文本输入界面模版
+├── Dockerfile             # Docker 文件
 ├── index.html             # 对话界面
 ├── server.js              # 服务器入口
 ├── package.json           # 项目依赖
