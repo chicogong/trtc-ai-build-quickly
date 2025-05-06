@@ -225,7 +225,7 @@ button {
 }
 
 .interrupt-button:before {
-  content: "✋";
+  /* content: "✋"; */
   margin-right: 5px;
   font-size: 14px;
 }
