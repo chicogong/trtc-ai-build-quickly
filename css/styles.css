@@ -414,7 +414,7 @@ button:disabled {
   }
 
   .volume-bar-container {
-    height: 6px;
+    height: 16px;
   }
 
   .button-container {
@@ -448,11 +448,11 @@ button:disabled {
   }
 
   .volume-bar-container {
-    height: 5px;
+    height: 14px;
   }
 
   .volume-bar {
-    height: 5px;
+    height: 14px;
   }
 
   button {
