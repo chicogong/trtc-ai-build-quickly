@@ -386,48 +386,78 @@ button:disabled {
    =========================================== */
 @media (max-width: 600px) {
   #status-volume-container {
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
     gap: 10px;
-    align-items: stretch;
   }
-  
+
   #status-container {
-    width: 100%;
-    justify-content: center;
+    flex: 1;
+    justify-content: flex-start;
+    gap: 5px;
   }
-  
+
+  .status-indicator {
+    width: auto;
+    min-width: 80px;
+    font-size: 11px;
+    padding: 4px 6px;
+  }
+
   .volume-indicators {
-    margin-left: 0;
-    justify-content: center;
+    flex: 1;
+    max-width: 150px;
   }
-  
+
   .volume-container {
-    width: 120px;
+    margin: 0;
   }
-  
+
   .volume-bar-container {
-    height: 20px;
+    height: 6px;
+  }
+
+  .button-container {
+    gap: 10px;
+    flex-wrap: nowrap;
+  }
+
+  button {
+    padding: 6px 12px;
+    font-size: 14px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .interrupt-button:before,
+  .mute-button:before {
+    font-size: 12px;
+    margin-right: 3px;
   }
 }
 
-/* Even smaller screens */
 @media (max-width: 400px) {
   .status-indicator {
-    width: 60px;
-    font-size: 9px;
+    min-width: 70px;
+    font-size: 10px;
+    padding: 3px 5px;
   }
-  
-  .volume-container {
-    width: 50px;
+
+  .volume-indicators {
+    max-width: 120px;
   }
-  
+
   .volume-bar-container {
-    height: 16px;
-    border-radius: 8px;
+    height: 5px;
   }
-  
+
   .volume-bar {
-    border-radius: 8px;
+    height: 5px;
+  }
+
+  button {
+    padding: 5px 10px;
+    font-size: 13px;
   }
 }
 
