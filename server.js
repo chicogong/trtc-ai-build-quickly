@@ -10,7 +10,7 @@ const TLSSigAPIv2 = require('tls-sig-api-v2');
 const agentConfig = require('./agent_cards');
 
 // Get agent card file from command line argument or use default
-const agentCardFile = process.argv[2] || 'default';
+const agentCardFile = process.argv[2] || process.env.AgentCard || 'default';
 const CONFIG = agentConfig[agentCardFile].CONFIG;
 
 const TrtcClient = tencentcloud.trtc.v20190722.Client;
