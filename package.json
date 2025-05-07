@@ -8,6 +8,7 @@
   },
   "private": true,
   "dependencies": {
+    "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "tencentcloud-sdk-nodejs-trtc": "^4.1.18",
     "tls-sig-api-v2": "^1.0.2"
