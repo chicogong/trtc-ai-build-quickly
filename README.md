@@ -101,6 +101,9 @@ trtc-ai-build-quickly/
 │   ├── sweet_girl.js        # 甜妹陪聊 Agent 配置
 │   ├── mcp_tencent_map.js   # MCP 腾讯地图 Agent 配置
 │   └── default.js           # 默认 Agent 配置
+├── ai_gen_servers/        # 接入语音对话的AI生成模块(可选)
+│   ├── llm/                 # LLM 代理服务实现，实现自定义function call等
+│   └── ...                  # MCP/A2A 等服务端实现
 ├── css/                     # 样式文件
 ├── docs/                  # 文档
 │   └── images/               # 图片资源

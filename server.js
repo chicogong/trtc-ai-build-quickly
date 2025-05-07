@@ -10,7 +10,7 @@ const TLSSigAPIv2 = require('tls-sig-api-v2');
 const agentConfig = require('./agent_cards');
 
 // Get agent card file from command line argument or use default
-const agentCardFile = process.argv[2] || process.env.AgentCard || 'default';
+const agentCardFile = process.argv[2] || process.env.AGENT_CARD || 'default';
 const CONFIG = agentConfig[agentCardFile].CONFIG;
 
 const TrtcClient = tencentcloud.trtc.v20190722.Client;
@@ -115,6 +115,23 @@ app.get('/getAgentInfo', (req, res) => {
     } catch (error) {
         console.error('Failed to get agent information:', error);
         res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * Handle TRTC-AI server callback
+ * POST /serverCallback
+ * This is the TRTC-AI server callback documentation: https://cloud.tencent.com/document/product/647/115506
+ * You can implement custom logic based on different callback event types
+ */
+app.post('/serverCallback', (req, res) => {
+    try {
+        const sdkAppId = req.headers.sdkappid;
+        console.log('Received server callback:', { time: new Date().toLocaleString(), sdkAppId: sdkAppId, body: req.body });
+        res.json({ code: 0 });
+    } catch (error) {
+        console.error('Error in server callback:', error);
+        res.status(500).json({ code: -1, error: error.message });
     }
 });
 

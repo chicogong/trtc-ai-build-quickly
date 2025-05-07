@@ -31,7 +31,7 @@ COPY --from=builder /app/index.html ./
 ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOST=0.0.0.0
-ENV AgentCard=default
+ENV AGENT_CARD=default
 
 # Expose port
 EXPOSE 3000
