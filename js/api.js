@@ -4,16 +4,21 @@
 
 /**
  * Fetches user information from the server
+ * @param {string} agentId - The agent ID to use for the conversation
  * @returns {Promise<Object>} The user info object
  */
-async function getUserInfo() {
+async function getUserInfo(agentId) {
   try {
+    if (!agentId) {
+      throw new Error('Agent ID is required');
+    }
+    
     const response = await fetch(`${API_BASE_URL}/getInfo`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({})
+      body: JSON.stringify({ agentId })
     });
 
     if (!response.ok) {
@@ -31,11 +36,22 @@ async function getUserInfo() {
 
 /**
  * Initializes the chat configuration
+ * @param {string} [agentId] - Optional agent ID to include in user info
  * @returns {Promise<Object>} Object containing user info
  */
-async function initChatConfig() {
+async function initChatConfig(agentId) {
   try {
-    const userInfo = await getUserInfo();
+    if (!agentId) {
+      throw new Error('Agent ID is required for chat configuration');
+    }
+    
+    // Get user info from server with the specified agent
+    const userInfo = await getUserInfo(agentId);
+    
+    // Add agent info to ensure it's passed in the conversation request
+    userInfo.agent = agentId;
+    console.log('Chat config initialized with agent:', agentId);
+    
     return { userInfo };
   } catch (error) {
     console.error('Failed to initialize chat config:', error);
@@ -50,6 +66,8 @@ async function initChatConfig() {
  */
 async function startAIConversation(data) {
   try {
+    console.log('Starting AI conversation with data:', data);
+    
     const response = await fetch(`${API_BASE_URL}/startConversation`, {
       method: "POST",
       headers: {
@@ -59,7 +77,9 @@ async function startAIConversation(data) {
     });
 
     if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
+      const errorText = await response.text();
+      console.error('Server response:', errorText);
+      throw new Error(`API error: ${response.status} - ${response.statusText}`);
     }
 
     return await response.json();
