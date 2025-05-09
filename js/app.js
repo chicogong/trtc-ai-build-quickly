@@ -5,6 +5,8 @@
 // Application state
 let taskId = null;
 let muteState = false;
+let selectedAgent = null;
+let agentsCache = {}; // Cache to store all agent information
 
 /**
  * ===========================================
@@ -17,11 +19,19 @@ let muteState = false;
  */
 async function startConversation() {
   try {
+    // Validate agent selection
+    if (!selectedAgent) {
+      addSystemMessage("Please select an AI assistant first");
+      return;
+    }
+    
     // Disable start button while connecting
     startButton.disabled = true;
     updateStatus('room', "Connecting...");
 
-    const { userInfo } = await initChatConfig();
+    // Get user info from API module with selected agent
+    const { userInfo } = await initChatConfig(selectedAgent);
+    
     const { sdkAppId, userSig, userId, roomId, robotId } = userInfo;
 
     // Save user information
@@ -37,7 +47,7 @@ async function startConversation() {
 
     updateStatus('room', "✅ Connected");
 
-    // Start AI conversation
+    // Start AI conversation - Fix: Pass userInfo directly without extra nesting
     const response = await startAIConversation(JSON.stringify({ userInfo }));
     taskId = response.TaskId;
     console.log('AI conversation started with task ID:', taskId);
@@ -47,6 +57,9 @@ async function startConversation() {
     sendButton.disabled = false;
     interruptButton.disabled = false;
     muteButton.disabled = false;
+
+    // Add call-active class to hide agent selection
+    document.getElementById('app').classList.add('call-active');
   } catch (error) {
     console.error("Failed to start conversation:", error);
     updateStatus('room', "Connection Failed");
@@ -100,6 +113,9 @@ async function stopConversation() {
   taskId = null;
   resetMetrics();
   resetUI();
+
+  // Remove call-active class to show agent selection
+  document.getElementById('app').classList.remove('call-active');
 }
 
 /**
@@ -107,6 +123,34 @@ async function stopConversation() {
  * UI INTERACTION FUNCTIONS
  * ===========================================
  */
+
+/**
+ * Loads and displays information about the selected agent from cache
+ * @param {string} agentId - The ID of the selected agent
+ */
+function showAgentInfo(agentId) {
+  try {
+    // Don't load agent info if no agent is selected
+    if (!agentId) {
+      console.log('No agent selected, skipping agent info display');
+      return;
+    }
+    
+    // Check if we have agent info in cache
+    if (!agentsCache[agentId]) {
+      console.error(`Agent info not found in cache for: ${agentId}`);
+      addSystemMessage(`Could not display agent information for: ${agentId}`);
+      return;
+    }
+    
+    // Update the agent card with cached info
+    updateAgentCard(agentsCache[agentId]);
+    console.log(`Displayed agent info for: ${agentId} from cache`);
+  } catch (error) {
+    console.error('Failed to display agent info:', error);
+    addSystemMessage(`Failed to display agent: ${error.message}`);
+  }
+}
 
 /**
  * Send a text message from the input field
@@ -141,10 +185,158 @@ async function handleToggleMute() {
  */
 
 /**
+ * Loads all available agents from the server with their complete information
+ */
+async function loadAllAgentsInfo() {
+  try {
+    const agentSelect = document.getElementById('agent-select');
+    const startButton = document.getElementById('start-button');
+    
+    if (!agentSelect) return;
+    
+    // Disable start button until agents are loaded
+    if (startButton) {
+      startButton.disabled = true;
+      startButton.title = "Loading agents...";
+    }
+    
+    // Clear chat list to remove any existing agent cards
+    const chatList = document.querySelector('.chat-list');
+    if (chatList) {
+      chatList.innerHTML = '';
+    }
+    
+    // Set loading state
+    agentSelect.setAttribute('data-loading', 'true');
+    agentSelect.disabled = true;
+    
+    // Clear existing options
+    agentSelect.innerHTML = '';
+    
+    // Add loading option
+    const loadingOption = document.createElement('option');
+    loadingOption.disabled = true;
+    loadingOption.selected = true;
+    loadingOption.textContent = 'Loading agents...';
+    agentSelect.appendChild(loadingOption);
+    
+    // Fetch all agents info from server
+    const response = await fetch(`${API_BASE_URL}/getAllAgentsInfo`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch agents info: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    const agentsData = data.agents || {};
+    const agentIds = Object.keys(agentsData);
+    
+    // Store all agent info in cache
+    agentsCache = agentsData;
+    
+    // Remove loading state
+    agentSelect.removeAttribute('data-loading');
+    agentSelect.disabled = false;
+    
+    // Clear loading option
+    agentSelect.innerHTML = '';
+    
+    if (agentIds.length === 0) {
+      const noAgentsOption = document.createElement('option');
+      noAgentsOption.disabled = true;
+      noAgentsOption.textContent = 'No agents available';
+      agentSelect.appendChild(noAgentsOption);
+      
+      // Keep start button disabled
+      if (startButton) {
+        startButton.disabled = true;
+        startButton.title = "No agents available";
+      }
+      
+      // Show message in chat
+      addSystemMessage("No AI assistants available. Please try again later.");
+      return;
+    }
+    
+    // Add agents to select dropdown
+    agentIds.forEach(agentId => {
+      const agent = agentsData[agentId];
+      const option = document.createElement('option');
+      option.value = agentId;
+      option.textContent = agent.name;
+      agentSelect.appendChild(option);
+    });
+    
+    // Automatically select the first agent
+    if (agentIds.length > 0) {
+      selectedAgent = agentIds[0];
+      agentSelect.value = selectedAgent;
+      
+      // Enable start button
+      if (startButton) {
+        startButton.disabled = false;
+        startButton.title = "";
+      }
+      
+      // Display the first agent's information from cache
+      showAgentInfo(selectedAgent);
+    }
+    
+    console.log(`Loaded ${agentIds.length} agents, selected: ${selectedAgent}`);
+  } catch (error) {
+    console.error('Failed to load agents info:', error);
+    const agentSelect = document.getElementById('agent-select');
+    const startButton = document.getElementById('start-button');
+    
+    if (agentSelect) {
+      // Remove loading state
+      agentSelect.removeAttribute('data-loading');
+      agentSelect.disabled = false;
+      
+      agentSelect.innerHTML = '';
+      const errorOption = document.createElement('option');
+      errorOption.disabled = true;
+      errorOption.selected = true;
+      errorOption.textContent = 'Error loading agents';
+      agentSelect.appendChild(errorOption);
+    }
+    
+    // Keep start button disabled
+    if (startButton) {
+      startButton.disabled = true;
+      startButton.title = "Failed to load agents";
+    }
+    
+    // Add error message to chat
+    addSystemMessage(`Failed to load agents: ${error.message}`);
+  }
+}
+
+/**
  * Initialize the application
  */
 function initializeApp() {
-  // Set up event listeners
+  // Get DOM elements
+  const agentSelect = document.getElementById('agent-select');
+  const startButton = document.getElementById('start-button');
+  
+  // Set up agent selection handling
+  agentSelect.addEventListener('change', (e) => {
+    selectedAgent = e.target.value;
+    
+    // Enable start button once an agent is selected
+    if (startButton && selectedAgent) {
+      startButton.disabled = false;
+      startButton.title = "";
+    }
+    
+    // Display agent info from cache
+    showAgentInfo(selectedAgent);
+  });
+  
+  // Load all agents info from server
+  loadAllAgentsInfo();
+  
+  // Set up main button event listeners
   startButton.addEventListener('click', startConversation);
   endButton.addEventListener('click', stopConversation);
   sendButton.addEventListener('click', handleSendMessage);
