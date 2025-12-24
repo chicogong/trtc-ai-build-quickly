@@ -4,12 +4,30 @@
  */
 
 /**
+ * ===========================================
+ * AGENT CARD HTML BUILDING
+ * ===========================================
+ */
+
+/**
+ * Creates HTML for a capability item
+ * @param {string} capability - The capability text
+ * @returns {string} HTML string for the capability
+ */
+function createCapabilityItem(capability) {
+  return `<span class="capability-item">${capability}</span>`;
+}
+
+/**
  * Builds HTML for capabilities list
  * @param {string[]} capabilities - List of agent capabilities
  * @returns {string} HTML string for capabilities
  */
 function buildCapabilitiesHTML(capabilities) {
-  return capabilities.map(cap => `<div class="capability-item">${cap}</div>`).join('');
+  if (!capabilities || !Array.isArray(capabilities) || capabilities.length === 0) {
+    return '';
+  }
+  return capabilities.map(cap => createCapabilityItem(cap)).join('');
 }
 
 /**
@@ -18,52 +36,46 @@ function buildCapabilitiesHTML(capabilities) {
  * @returns {string} Complete card HTML string
  */
 function buildCardHTML(agentInfo) {
-  return (
-    '<div class="chat-agent-card">' +
-      '<div class="agent-header">' +
-        `<img src="${agentInfo.avatar}" alt="AI" class="agent-avatar">` +
-        '<div class="agent-info">' +
-          `<div class="agent-name">${agentInfo.name}</div>` +
-          `<div class="agent-voice">${agentInfo.voiceType}</div>` +
-        '</div>' +
-      '</div>' +
-      `<div class="agent-description">${agentInfo.description}</div>` +
-      '<div class="agent-capabilities">' +
-        '<div class="capabilities-title">I can help you:</div>' +
-        `<div class="capabilities-list">${buildCapabilitiesHTML(agentInfo.capabilities)}</div>` +
-      '</div>' +
-      '<div class="agent-personality">' +
-        '<span class="personality-label">Personality：</span>' +
-        `<span class="personality-text">${agentInfo.personality}</span>` +
-      '</div>' +
-    '</div>'
-  );
+  if (!agentInfo) return '';
+  
+  const avatar = agentInfo.avatar || 'assets/default-avatar.png';
+  const name = agentInfo.name || 'AI Assistant';
+  const voiceType = agentInfo.voiceType || 'Default Voice';
+  const description = agentInfo.description || 'No description available.';
+  const capabilities = agentInfo.capabilities || [];
+  const personality = agentInfo.personality || '';
+  
+  return `
+    <div class="chat-agent-card">
+      <div class="agent-header">
+        <img src="${avatar}" alt="AI" class="agent-avatar">
+        <div class="agent-info">
+          <div class="agent-name">${name}</div>
+          <div class="agent-voice">${voiceType}</div>
+        </div>
+      </div>
+      <div class="agent-description">${description}</div>
+      ${capabilities.length > 0 ? `
+        <div class="agent-capabilities">
+          <div class="capabilities-title">I can help you:</div>
+          <div class="capabilities-list">${buildCapabilitiesHTML(capabilities)}</div>
+        </div>
+      ` : ''}
+      ${personality ? `
+        <div class="agent-personality">
+          <span class="personality-label">Personality：</span>
+          <span class="personality-text">${personality}</span>
+        </div>
+      ` : ''}
+    </div>
+  `;
 }
 
 /**
- * Fetches the agent card information from the server
- * @returns {Promise<Object>} Agent information object
+ * ===========================================
+ * AGENT CARD DISPLAY
+ * ===========================================
  */
-async function getAgentCardInfo() {
-  try {
-    const response = await fetch(`${API_BASE_URL}/getAgentInfo`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch agent info: ${response.status}`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.error('Error getting agent info:', error);
-    // Fallback to default agent info
-    return {
-      name: "TRTC Assistant",
-      avatar: "assets/avatar.png",
-      description: "I'm your AI assistant powered by TRTC technology.",
-      capabilities: ["Real-time conversation", "Voice interaction", "Question answering", "Information lookup"],
-      voiceType: "Professional female voice (custom-service)",
-      personality: "Helpful and friendly"
-    };
-  }
-}
 
 /**
  * Displays the agent card in the chat
@@ -85,8 +97,42 @@ function displayAgentCard(agentInfo) {
 }
 
 /**
- * Initializes the agent card
+ * Update the agent card with new agent information
+ * @param {Object} agentInfo - The agent information object
  */
+function updateAgentCard(agentInfo) {
+  if (!agentInfo) {
+    console.error('No agent info provided');
+    return;
+  }
+
+  // Create agent card HTML
+  const cardHTML = buildCardHTML(agentInfo);
+
+  // Add the card to the chat list
+  const chatList = document.querySelector('.chat-list');
+  if (!chatList) {
+    console.error('Chat list element not found');
+    return;
+  }
+  
+  const cardElement = document.createElement('div');
+  cardElement.className = 'chat-item ai';
+  cardElement.innerHTML = cardHTML;
+  
+  // Remove any existing agent cards
+  const existingCards = chatList.querySelectorAll('.chat-agent-card');
+  existingCards.forEach(card => card.closest('.chat-item')?.remove());
+  
+  // Add the new card at the top of the chat list
+  chatList.insertBefore(cardElement, chatList.firstChild);
+}
+
+// Note: We no longer initialize the agent card automatically on DOM load.
+// Agent cards will only be displayed when explicitly selected by the user.
+// The initializing code below has been commented out as it used a default agent.
+
+/*
 async function initializeAgentCard() {
   try {
     const agentInfo = await getAgentCardInfo();
@@ -97,4 +143,5 @@ async function initializeAgentCard() {
 }
 
 // Initialize the agent card when the DOM is loaded
-document.addEventListener('DOMContentLoaded', initializeAgentCard); 
+document.addEventListener('DOMContentLoaded', initializeAgentCard);
+*/ 
