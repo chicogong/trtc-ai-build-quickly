@@ -14,9 +14,9 @@ async function getUserInfo(agentId) {
     }
     
     const response = await fetch(`${API_BASE_URL}/getInfo`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({ agentId })
     });
@@ -69,11 +69,11 @@ async function startAIConversation(data) {
     console.log('Starting AI conversation with data:', data);
     
     const response = await fetch(`${API_BASE_URL}/startConversation`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json'
       },
-      body: data,
+      body: data
     });
 
     if (!response.ok) {
@@ -84,7 +84,7 @@ async function startAIConversation(data) {
 
     return await response.json();
   } catch (error) {
-    console.error("Failed to start AI conversation:", error);
+    console.error('Failed to start AI conversation:', error);
     throw error;
   }
 }
@@ -97,11 +97,11 @@ async function startAIConversation(data) {
 async function stopAIConversation(data) {
   try {
     const response = await fetch(`${API_BASE_URL}/stopConversation`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json'
       },
-      body: data,
+      body: data
     });
 
     if (!response.ok) {
@@ -110,7 +110,7 @@ async function stopAIConversation(data) {
 
     return await response.json();
   } catch (error) {
-    console.error("Failed to stop AI conversation:", error);
+    console.error('Failed to stop AI conversation:', error);
     throw error;
   }
 } 

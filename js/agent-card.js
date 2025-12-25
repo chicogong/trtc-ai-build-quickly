@@ -36,7 +36,7 @@ function buildCapabilitiesHTML(capabilities) {
  * @returns {string} Complete card HTML string
  */
 function buildCardHTML(agentInfo) {
-  if (!agentInfo) return '';
+  if (!agentInfo) {return '';}
   
   const avatar = agentInfo.avatar || 'assets/default-avatar.png';
   const name = agentInfo.name || 'AI Assistant';

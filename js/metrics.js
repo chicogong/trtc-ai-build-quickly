@@ -56,7 +56,7 @@ function displayLatencyStatistics() {
       // llm_network_latency: 'llm_net',
       llm_first_token: 'llm',
       // tts_network_latency: 'tts_net',
-      tts_first_frame_latency: 'tts ',
+      tts_first_frame_latency: 'tts '
       // tts_discontinuity: 'tts_dic',
       // interruption: 'interrupt'
     };
@@ -79,19 +79,19 @@ function displayLatencyStatistics() {
       }
     });
     
-    let table = "metrics(ms):\n";
-    table += "🕹️  | avg | min | max | *\n";
+    let table = 'metrics(ms):\n';
+    table += '🕹️  | avg | min | max | *\n';
     
     Object.keys(statistics).forEach(metric => {
       const stat = statistics[metric];
       const label = metricLabels[metric];
-      if (!label) return; 
+      if (!label) {return;} 
       table += `${label} | ${stat.avg} | ${stat.min} | ${stat.max} | ${stat.count}\n`;
     });
     
     // If no metrics were recorded
     if (Object.keys(statistics).length === 0) {
-      table = "No latency metrics recorded";
+      table = 'No latency metrics recorded';
     }
     
     // Add the summary to the chat

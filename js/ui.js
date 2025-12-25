@@ -3,13 +3,13 @@
  */
 
 // DOM Elements
-const chatListElement = document.querySelector(".chat-list");
-const startButton = document.getElementById("start-button");
-const endButton = document.getElementById("end-button");
-const textInput = document.getElementById("text-input");
-const sendButton = document.getElementById("send-button");
-const interruptButton = document.getElementById("interrupt-button");
-const muteButton = document.getElementById("mute-button");
+const chatListElement = document.querySelector('.chat-list');
+const startButton = document.getElementById('start-button');
+const endButton = document.getElementById('end-button');
+const textInput = document.getElementById('text-input');
+const sendButton = document.getElementById('send-button');
+const interruptButton = document.getElementById('interrupt-button');
+const muteButton = document.getElementById('mute-button');
 
 // Chat messages array
 let messages = [];
@@ -21,15 +21,15 @@ function renderChatMessages() {
   const fragment = document.createDocumentFragment();
 
   messages.forEach(message => {
-    const messageElement = document.createElement("div");
-    messageElement.classList.add("chat-item", message.type);
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('chat-item', message.type);
 
-    const senderElement = document.createElement("div");
-    senderElement.classList.add("chat-id");
+    const senderElement = document.createElement('div');
+    senderElement.classList.add('chat-id');
     senderElement.textContent = message.sender;
 
-    const contentElement = document.createElement("div");
-    contentElement.classList.add("chat-text");
+    const contentElement = document.createElement('div');
+    contentElement.classList.add('chat-text');
     contentElement.textContent = message.content;
 
     messageElement.appendChild(senderElement);
@@ -37,7 +37,7 @@ function renderChatMessages() {
     fragment.appendChild(messageElement);
   });
 
-  chatListElement.innerHTML = "";
+  chatListElement.innerHTML = '';
   chatListElement.appendChild(fragment);
 }
 
@@ -48,8 +48,8 @@ function renderChatMessages() {
  */
 function updateStatus(type, statusText) {
   const element = type === 'ai' ?
-          document.getElementById('ai-state') :
-          document.getElementById('room-status');
+    document.getElementById('ai-state') :
+    document.getElementById('room-status');
 
   if (element) {
     element.textContent = statusText;
@@ -123,6 +123,6 @@ function resetUI() {
   endButton.disabled = true;
   sendButton.disabled = true;
   interruptButton.disabled = true;
-  updateStatus('room', "Disconnected");
-  updateStatus('ai', "AI NotReady");
+  updateStatus('room', 'Disconnected');
+  updateStatus('ai', 'AI NotReady');
 } 

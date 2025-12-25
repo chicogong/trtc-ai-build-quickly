@@ -21,13 +21,13 @@ async function startConversation() {
   try {
     // Validate agent selection
     if (!selectedAgent) {
-      addSystemMessage("Please select an AI assistant first");
+      addSystemMessage('Please select an AI assistant first');
       return;
     }
     
     // Disable start button while connecting
     startButton.disabled = true;
-    updateStatus('room', "Connecting...");
+    updateStatus('room', 'Connecting...');
 
     // Get user info from API module with selected agent
     const { userInfo } = await initChatConfig(selectedAgent);
@@ -45,7 +45,7 @@ async function startConversation() {
       userSig
     });
 
-    updateStatus('room', "✅ Connected");
+    updateStatus('room', '✅ Connected');
 
     // Start AI conversation - Fix: Pass userInfo directly without extra nesting
     const response = await startAIConversation(JSON.stringify({ userInfo }));
@@ -61,8 +61,8 @@ async function startConversation() {
     // Add call-active class to hide agent selection
     document.getElementById('app').classList.add('call-active');
   } catch (error) {
-    console.error("Failed to start conversation:", error);
-    updateStatus('room', "Connection Failed");
+    console.error('Failed to start conversation:', error);
+    updateStatus('room', 'Connection Failed');
     startButton.disabled = false;
 
     // Display error in chat
@@ -82,13 +82,13 @@ async function stopConversation() {
   muteButton.textContent = 'Mute';
   muteButton.classList.remove('muted');
   muteState = false;
-  updateStatus('room', "Disconnecting...");
+  updateStatus('room', 'Disconnecting...');
 
   try {
     // Stop the AI conversation task
     if (taskId) {
       await stopAIConversation(JSON.stringify({
-        TaskId: taskId,
+        TaskId: taskId
       }));
       console.log('AI conversation stopped successfully');
     }
@@ -157,7 +157,7 @@ function showAgentInfo(agentId) {
  */
 function handleSendMessage() {
   if (sendCustomTextMessage(textInput.value)) {
-    textInput.value = ""; // Clear the input field
+    textInput.value = ''; // Clear the input field
   }
 }
 
@@ -192,12 +192,12 @@ async function loadAllAgentsInfo() {
     const agentSelect = document.getElementById('agent-select');
     const startButton = document.getElementById('start-button');
     
-    if (!agentSelect) return;
+    if (!agentSelect) {return;}
     
     // Disable start button until agents are loaded
     if (startButton) {
       startButton.disabled = true;
-      startButton.title = "Loading agents...";
+      startButton.title = 'Loading agents...';
     }
     
     // Clear chat list to remove any existing agent cards
@@ -249,11 +249,11 @@ async function loadAllAgentsInfo() {
       // Keep start button disabled
       if (startButton) {
         startButton.disabled = true;
-        startButton.title = "No agents available";
+        startButton.title = 'No agents available';
       }
       
       // Show message in chat
-      addSystemMessage("No AI assistants available. Please try again later.");
+      addSystemMessage('No AI assistants available. Please try again later.');
       return;
     }
     
@@ -274,7 +274,7 @@ async function loadAllAgentsInfo() {
       // Enable start button
       if (startButton) {
         startButton.disabled = false;
-        startButton.title = "";
+        startButton.title = '';
       }
       
       // Display the first agent's information from cache
@@ -303,7 +303,7 @@ async function loadAllAgentsInfo() {
     // Keep start button disabled
     if (startButton) {
       startButton.disabled = true;
-      startButton.title = "Failed to load agents";
+      startButton.title = 'Failed to load agents';
     }
     
     // Add error message to chat
@@ -326,7 +326,7 @@ function initializeApp() {
     // Enable start button once an agent is selected
     if (startButton && selectedAgent) {
       startButton.disabled = false;
-      startButton.title = "";
+      startButton.title = '';
     }
     
     // Display agent info from cache

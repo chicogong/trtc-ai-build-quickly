@@ -15,10 +15,10 @@ const AI_STATES = {
 
 // User-friendly state labels for UI display
 const STATE_LABELS = {
-  [AI_STATES.LISTENING]: "👂 Listening",
-  [AI_STATES.THINKING]: "💭 Thinking",
-  [AI_STATES.SPEAKING]: "💬 Speaking",
-  [AI_STATES.INTERRUPT]: "⚡️ Interrupt"
+  [AI_STATES.LISTENING]: '👂 Listening',
+  [AI_STATES.THINKING]: '💭 Thinking',
+  [AI_STATES.SPEAKING]: '💬 Speaking',
+  [AI_STATES.INTERRUPT]: '⚡️ Interrupt'
 };
 
 // Message types for TRTC custom messages

@@ -33,10 +33,10 @@ async function enterTRTCRoom(params) {
   const client = initTRTCClient();
   await client.enterRoom({
     roomId: parseInt(params.roomId),
-    scene: "rtc",
+    scene: 'rtc',
     sdkAppId: params.sdkAppId,
     userId: params.userId,
-    userSig: params.userSig,
+    userSig: params.userSig
   });
   
   // Set up message handler
@@ -103,7 +103,7 @@ function setUserIds(userId, aiUserId) {
  * @returns {Promise} Promise that resolves when mute status is updated
  */
 async function toggleMute(mute) {
-  if (!trtcClient) return false;
+  if (!trtcClient) {return false;}
   
   try {
     await trtcClient.updateLocalAudio({ mute: mute });
@@ -126,7 +126,7 @@ async function toggleMute(mute) {
  * @param {string} message - The message to send
  */
 function sendCustomTextMessage(message) {
-  if (!trtcClient || !message.trim()) return;
+  if (!trtcClient || !message.trim()) {return;}
   
   try {
     const messageText = message.trim();
@@ -153,7 +153,7 @@ function sendCustomTextMessage(message) {
     console.log('Custom text message sent');
     return true;
   } catch (error) {
-    console.error("Failed to send custom message:", error);
+    console.error('Failed to send custom message:', error);
     return false;
   }
 }
@@ -162,7 +162,7 @@ function sendCustomTextMessage(message) {
  * Send an interrupt signal to the AI
  */
 function sendInterruptSignal() {
-  if (!trtcClient) return false;
+  if (!trtcClient) {return false;}
   
   try {
     const messageId = Date.now().toString();
@@ -187,7 +187,7 @@ function sendInterruptSignal() {
     console.log('Interrupt signal sent');
     return true;
   } catch (error) {
-    console.error("Failed to send interrupt signal:", error);
+    console.error('Failed to send interrupt signal:', error);
     return false;
   }
 }
@@ -254,7 +254,7 @@ function handleConversationMessage(data) {
  */
 function handleStateChangeMessage(data) {
   const state = data.payload.state;
-  const stateText = STATE_LABELS[state] || "Unknown State";
+  const stateText = STATE_LABELS[state] || 'Unknown State';
   updateStatus('ai', stateText);
 }
 
