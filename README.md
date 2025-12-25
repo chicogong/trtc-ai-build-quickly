@@ -3,10 +3,15 @@
 <div align="center">
 
 [![TRTC](https://img.shields.io/badge/TRTC_AI-2.0.0-blue.svg)](https://cloud.tencent.com/product/trtc)
-[![TRTC](https://img.shields.io/badge/AI_Agent-2.0.0-blue.svg)](https://cloud.tencent.com/document/product/647/110584)
-[![Node.js](https://img.shields.io/badge/Node.js-18.0.0-green.svg)](https://nodejs.org/)
+[![AI Agent](https://img.shields.io/badge/AI_Agent-2.0.0-blue.svg)](https://cloud.tencent.com/document/product/647/110584)
+[![Node.js](https://img.shields.io/badge/Node.js-18.0+-green.svg)](https://nodejs.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
+[![GitHub stars](https://img.shields.io/github/stars/chicogong/trtc-ai-build-quickly?style=social)](https://github.com/chicogong/trtc-ai-build-quickly/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/chicogong/trtc-ai-build-quickly?style=social)](https://github.com/chicogong/trtc-ai-build-quickly/network/members)
+[![GitHub issues](https://img.shields.io/github/issues/chicogong/trtc-ai-build-quickly)](https://github.com/chicogong/trtc-ai-build-quickly/issues)
+[![GitHub last commit](https://img.shields.io/github/last-commit/chicogong/trtc-ai-build-quickly)](https://github.com/chicogong/trtc-ai-build-quickly/commits/master)
 
 </div>
 
